@@ -40,3 +40,48 @@ h3 {
 .bg-surface-gradient {
   background: var(--bg-gradient-surface);
 }
+
+button,
+[role="button"],
+a {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* Wave motion for region cards */
+@keyframes card-wave {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-12px) rotate(-1.2deg);
+  }
+  50% {
+    transform: translateY(0) rotate(0deg);
+  }
+  75% {
+    transform: translateY(12px) rotate(1.2deg);
+  }
+}
+
+.wave-card {
+  animation: card-wave 3.4s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * -0.6s);
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
+.wave-card:hover {
+  animation-play-state: paused;
+  border-color: rgb(255 255 255 / 0.3);
+  background-color: #243029;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wave-card {
+    animation: none;
+  }
+}

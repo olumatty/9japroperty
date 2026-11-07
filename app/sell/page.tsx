@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Navbar } from "@/app/components/layout/Navbar";
 import { SellForm } from "@/app/components/sell/SellForm";
 import { Footer } from "@/app/components/footer/Footer";
 import { labelClass } from "@/app/lib/styles";
@@ -20,8 +19,6 @@ export default function SellPage() {
   return (
     <>
       <main className="mx-auto w-full max-w-[1480px] px-4 pb-20 sm:px-5 lg:px-6">
-        <Navbar active="Sell" />
-
         <section className="mt-8 grid gap-10 lg:grid-cols-[1fr_1.35fr] lg:gap-16">
           <div className="lg:sticky lg:top-8 lg:self-start">
             <p className={`${labelClass} rise`}>Sell with The9jaPropertyChic</p>

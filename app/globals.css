@@ -98,6 +98,16 @@ button:disabled {
   }
 }
 
+@keyframes wa-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgb(37 211 102 / 0.5);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 16px rgb(37 211 102 / 0);
+  }
+}
+
 @keyframes pulse-ring {
   0% {
     box-shadow: 0 0 0 0 rgb(16 22 18 / 0.45);
@@ -144,8 +154,13 @@ button:disabled {
   animation: pulse-ring 2.2s ease-out infinite;
 }
 
+.wa-pulse {
+  animation: wa-pulse 2.4s ease-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal,
+  .wa-pulse,
   .pulse-ring {
     animation: none;
   }
@@ -241,5 +256,16 @@ button:disabled {
 @media (prefers-reduced-motion: reduce) {
   .shine:hover::after {
     transition: none;
+  }
+}
+
+/* Anchor links: smooth scroll, offset for the sticky navbar */
+html {
+  scroll-padding-top: 88px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
   }
 }

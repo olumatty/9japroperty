@@ -7,15 +7,7 @@ import { labelClass } from "@/app/lib/styles";
 
 export function Hero() {
   return (
-    <div className="mx-auto w-full max-w-[1480px] px-4 sm:px-5 lg:px-6">
-      {/* Top bar */}
-      <header className="rise flex items-center justify-between py-5">
-        <Link href="/" className="font-display text-md font-extrabold">
-          The9jaPropertyChic
-        </Link>
-        <p className={`${labelClass} hidden sm:block`}>Buy. Sell. Invest. Stay.</p>
-      </header>
-
+    <div className="mx-auto w-full max-w-[1480px] px-4 pt-2 sm:px-5 lg:px-6">
       {/* Hero card */}
       <section className="relative overflow-hidden rounded-[32px] bg-surface">
         <div className="hero-bg absolute inset-0">

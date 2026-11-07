@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display, Syne } from "next/font/google";
 import "./globals.css";
 import { siteUrl } from "@/app/lib/site";
+import { Navbar } from "@/app/components/layout/Navbar";
+import { BackToTop } from "@/app/components/layout/BackToTop";
+import { WhatsAppButton } from "@/app/components/layout/WhatsAppButton";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -48,9 +51,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${inter.variable} ${playfair.variable} ${syne.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <Navbar />
+        {children}
+        <BackToTop />
+        <WhatsAppButton />
+      </body>
     </html>
   );
 }

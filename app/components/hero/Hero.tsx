@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { contact } from "@/app/data/contact";
 import { regions } from "@/app/data/regions";
@@ -17,12 +18,22 @@ export function Hero() {
 
       {/* Hero card */}
       <section className="relative overflow-hidden rounded-[32px] bg-surface">
+        <div className="hero-bg absolute inset-0">
+          <Image
+            src="/hero.webp"
+            alt=""
+            fill
+            preload
+            sizes="(min-width: 1480px) 1480px, 100vw"
+            className="object-cover object-[65%_center]"
+          />
+        </div>
         <div
           aria-hidden="true"
-          className="hero-bg absolute inset-0 bg-cover bg-[position:65%_center]"
+          className="absolute inset-0"
           style={{
             backgroundImage:
-              "linear-gradient(to right, rgba(16,22,18,0.85) 0%, rgba(16,22,18,0.5) 50%, rgba(16,22,18,0.15) 100%), linear-gradient(to top, rgba(16,22,18,0.5) 0%, rgba(16,22,18,0) 40%), url(/hero.jpg)",
+              "linear-gradient(to right, rgba(16,22,18,0.85) 0%, rgba(16,22,18,0.5) 50%, rgba(16,22,18,0.15) 100%), linear-gradient(to top, rgba(16,22,18,0.5) 0%, rgba(16,22,18,0) 40%)",
           }}
         />
         <div className="relative flex min-h-[540px] flex-col justify-center gap-5 px-6 py-10 sm:px-8 lg:min-h-[720px] lg:px-12">

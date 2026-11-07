@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Property } from "@/app/types/property";
 import { ArrowIcon } from "@/app/components/ui/ArrowIcon";
@@ -17,12 +18,15 @@ export function PropertyCard({
       className="reveal card-hover rounded-[28px] border border-white/5 bg-surface p-2 pb-8"
     >
       <div className="img-zoom h-[340px] rounded-[20px] bg-[#16201a]">
-        <div
-          role="img"
-          aria-label={title}
-          className="size-full bg-cover bg-center"
-          style={{ backgroundImage: `url(${image})` }}
-        />
+        <div className="relative size-full">
+          <Image
+            src={image}
+            alt={title}
+            fill
+            sizes="(min-width: 1024px) 460px, (min-width: 768px) 50vw, 100vw"
+            className="object-cover"
+          />
+        </div>
       </div>
 
       <div className="flex flex-col gap-3 px-6 pt-6">
@@ -38,7 +42,7 @@ export function PropertyCard({
         )}
 
         <Link
-          href="#consultation"
+          href={`/properties/${property.id}`}
           className="arrow-nudge mt-1 inline-flex h-[52px] w-fit items-center gap-4 rounded-full bg-white pl-6 pr-2 text-[15px] font-semibold text-[#101612] transition hover:bg-white/90"
         >
           Enquire

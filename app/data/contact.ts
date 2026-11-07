@@ -29,3 +29,9 @@ export function propertyEnquiryHref(propertyTitle: string) {
     `Hello The9jaPropertyChic, I'd like to enquire about: ${propertyTitle}.`,
   );
 }
+
+export const socials = [
+  { name: "TikTok", href: "https://www.tiktok.com/@the9japropertychic" },
+  { name: "Instagram", href: "https://www.instagram.com/_the9japropertychic" },
+  { name: "YouTube", href: "https://youtube.com/@the9japropertychic" },
+] as const;

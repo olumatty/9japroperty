@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { contact, exploreLinks } from "@/app/data/contact";
+import { contact, exploreLinks, socials } from "@/app/data/contact";
+import { SocialIcon } from "@/app/components/ui/SocialIcon";
 import { ArrowIcon } from "@/app/components/ui/ArrowIcon";
 import { labelClass } from "@/app/lib/styles";
 
@@ -45,6 +46,22 @@ export function Footer() {
             <p className="mt-4 font-display text-[11px] font-bold tracking-wide">
               Nigeria. Connected to you, wherever you are.
             </p>
+
+            <ul className="mt-6 flex items-center gap-3" aria-label="Social media">
+              {socials.map((social) => (
+                <li key={social.name}>
+                  <a
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`The9jaPropertyChic on ${social.name}`}
+                    className="grid size-11 place-items-center rounded-full border border-white/15 transition duration-300 hover:-translate-y-0.5 hover:border-white hover:bg-white hover:text-[#101612]"
+                  >
+                    <SocialIcon name={social.name} className="size-5" />
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
 
           <nav aria-label="Explore">

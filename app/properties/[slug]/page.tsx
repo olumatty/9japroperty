@@ -115,14 +115,32 @@ export default async function PropertyPage({ params }: Props) {
           )}
 
           {features && features.length > 0 && (
-            <>
-              <h2 className="mt-10 font-display text-2xl font-extrabold">
-                Property features
-              </h2>
-              <p className="mt-5 max-w-[1100px] text-[16px] font-medium leading-8">
-                {features.join(" · ")}
-              </p>
-            </>
+            <div className="mt-12">
+              <div className="flex items-center gap-4">
+                <h2 className="text-4xl leading-none sm:text-5xl">Property features</h2>
+                <span className="rounded-full border border-white/20 px-3 py-1 font-display text-[11px] font-bold tracking-widest">
+                  {String(features.length).padStart(2, "0")}
+                </span>
+                <span aria-hidden="true" className="hidden h-px flex-1 bg-gradient-to-r from-white/20 to-transparent sm:block" />
+              </div>
+
+              <ul className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {features.map((feature, i) => (
+                  <li
+                    key={feature}
+                    style={{ "--i": i % 4 } as React.CSSProperties}
+                    className="reveal group flex items-center gap-3 rounded-2xl border border-white/10 bg-background/50 px-4 py-4 text-[15px] font-semibold transition-colors duration-300 hover:border-white/30 hover:bg-background/80"
+                  >
+                    <span className="grid size-8 shrink-0 place-items-center rounded-full bg-white text-[#101612] transition-transform duration-300 group-hover:scale-110">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="size-4" aria-hidden="true">
+                        <path d="m5 12.5 4.5 4.5L19 7.5" />
+                      </svg>
+                    </span>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
 
           <p className="mt-10 max-w-[1100px] text-[16px] font-medium leading-7">

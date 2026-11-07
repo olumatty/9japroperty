@@ -7,7 +7,7 @@ import { ArrowIcon } from "@/app/components/ui/ArrowIcon";
 import { labelClass } from "@/app/lib/styles";
 
 const field =
-  "w-full rounded-2xl border border-white/10 bg-background px-4 py-3.5 text-[15px] font-medium text-foreground placeholder:text-white/35 outline-none transition focus:border-white/40";
+  "w-full rounded-2xl border border-white/10 bg-background px-4 py-3.5 text-[15px] font-medium text-foreground placeholder:text-white/35 outline-none transition duration-300 hover:border-white/25 focus:border-white/60 focus:bg-[#0d130f] focus:shadow-[0_0_0_4px_rgba(255,255,255,0.07)]";
 
 function buildMessage(data: FormData) {
   const get = (key: string) => String(data.get(key) ?? "").trim();
@@ -23,6 +23,7 @@ function buildMessage(data: FormData) {
     ["Asking price", get("price")],
     ["Title / documents", get("documents")],
     ["More details", get("details")],
+    ["Photos / documents", data.get("files") ? "I will attach them in this chat" : ""],
   ];
 
   const lines = rows.filter(([, value]) => value).map(([k, v]) => `${k}: ${v}`);
@@ -30,7 +31,7 @@ function buildMessage(data: FormData) {
   return ["Hello The9jaPropertyChic, I'd like to sell a property.", "", ...lines].join("\n");
 }
 
-type Sent = { href: string; name: string; type: string; location: string };
+type Sent = { href: string; name: string; type: string; location: string; files: boolean };
 
 export function SellForm() {
   const [sent, setSent] = useState<Sent | null>(null);
@@ -48,7 +49,13 @@ export function SellForm() {
     const href = whatsappLink(buildMessage(data));
     const get = (key: string) => String(data.get(key) ?? "").trim();
 
-    setSent({ href, name: get("name"), type: get("type"), location: get("location") });
+    setSent({
+      href,
+      name: get("name"),
+      type: get("type"),
+      location: get("location"),
+      files: data.get("files") !== null,
+    });
     window.open(href, "_blank", "noopener,noreferrer");
   }
 
@@ -79,6 +86,16 @@ export function SellForm() {
             to share them with us. Nothing is sent until you do.
           </p>
         </div>
+
+        {sent.files && (
+          <div className="max-w-[520px] rounded-2xl border border-white/25 bg-white/5 p-5 text-[14px] font-medium leading-6">
+            <p className="font-semibold">Don’t forget your photos and documents</p>
+            <p className="mt-1 text-white/80">
+              In the WhatsApp chat, tap the paperclip (＋ on iPhone), choose
+              your photos or files, then send them with your message.
+            </p>
+          </div>
+        )}
 
         <dl className="grid max-w-[520px] gap-3 rounded-2xl border border-white/10 bg-background/40 p-5 text-[14px] font-medium">
           {[
@@ -127,8 +144,12 @@ export function SellForm() {
       ref={formRef}
       onSubmit={onSubmit}
       hidden={sent !== null}
-      className="flex flex-col gap-10 rounded-[32px] bg-surface p-6 sm:p-10"
+      className="relative flex flex-col gap-10 overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-[#26322a] via-surface to-[#18211b] p-6 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.7)] sm:p-10"
     >
+      {/* soft decorative glows */}
+      <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-white/[0.07] blur-3xl" />
+      <div aria-hidden="true" className="pointer-events-none absolute -bottom-32 -left-24 size-72 rounded-full bg-emerald-300/[0.06] blur-3xl" />
+
       {/* Step 1 */}
       <Group number="01" title="Your details">
         <div className="grid gap-5 sm:grid-cols-2">
@@ -155,7 +176,7 @@ export function SellForm() {
                   required={i === 0}
                   className="peer sr-only"
                 />
-                <span className="inline-flex h-11 items-center rounded-full border border-white/15 bg-background px-5 text-[14px] font-semibold transition hover:border-white/40 peer-checked:border-white peer-checked:bg-white peer-checked:text-[#101612] peer-focus-visible:ring-2 peer-focus-visible:ring-white/60">
+                <span className="inline-flex h-11 select-none items-center rounded-full border border-white/15 bg-background px-5 text-[14px] font-semibold transition duration-300 hover:-translate-y-0.5 hover:border-white/50 peer-checked:-translate-y-0.5 peer-checked:border-white peer-checked:bg-white peer-checked:text-[#101612] peer-checked:shadow-[0_10px_28px_-8px_rgba(255,255,255,0.45)] peer-focus-visible:ring-2 peer-focus-visible:ring-white/60">
                   {type}
                 </span>
               </label>
@@ -171,10 +192,29 @@ export function SellForm() {
             <input id="price" name="price" className={field} placeholder="e.g. ₦350M" />
           </Field>
         </div>
+
+        <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-2xl border border-white/10 bg-background/40 p-4">
+          <input type="checkbox" name="files" className="peer sr-only" />
+          <span
+            aria-hidden="true"
+            className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-md border border-white/30 text-transparent transition peer-checked:border-white peer-checked:bg-white peer-checked:text-[#101612] peer-focus-visible:ring-2 peer-focus-visible:ring-white/60"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" className="size-3.5">
+              <path d="m5 12.5 4.5 4.5L19 7.5" />
+            </svg>
+          </span>
+          <span>
+            <span className="block text-[15px] font-semibold">I have photos or documents to share</span>
+            <span className="mt-1 block text-[13px] font-medium leading-5 text-white/60">
+              After WhatsApp opens, tap the paperclip (＋ on iPhone) to attach
+              them to the chat.
+            </span>
+          </span>
+        </label>
       </Group>
 
       {/* Optional */}
-      <details className="group rounded-2xl border border-white/10 bg-background/40">
+      <details className="group rounded-2xl border border-white/10 bg-background/40 transition-colors duration-300 open:border-white/25 open:bg-background/60 hover:border-white/25">
         <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-[15px] font-semibold [&::-webkit-details-marker]:hidden">
           Add more details
           <span className="flex items-center gap-3 text-[13px] font-medium text-white/60">
@@ -185,7 +225,7 @@ export function SellForm() {
           </span>
         </summary>
 
-        <div className="grid gap-5 px-5 pb-6 pt-2 sm:grid-cols-2">
+        <div className="grid gap-5 px-5 pb-6 pt-2 group-open:animate-[fade-up_0.45s_ease_both] sm:grid-cols-2">
           <Field label="Email" htmlFor="email">
             <input id="email" name="email" type="email" autoComplete="email" className={field} placeholder="you@example.com" />
           </Field>
@@ -210,7 +250,7 @@ export function SellForm() {
       <div>
         <button
           type="submit"
-          className="arrow-nudge inline-flex h-[56px] w-full items-center justify-between gap-4 rounded-full bg-white pl-7 pr-2 text-[16px] font-semibold text-[#101612] transition hover:bg-white/90 sm:w-auto sm:justify-start"
+          className="arrow-nudge shine relative inline-flex h-[56px] w-full items-center justify-between gap-4 overflow-hidden rounded-full bg-white pl-7 pr-2 text-[16px] font-semibold text-[#101612] shadow-[0_12px_32px_-10px_rgba(255,255,255,0.4)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_-10px_rgba(255,255,255,0.55)] sm:w-auto sm:justify-start"
         >
           Continue on WhatsApp
           <span className="grid size-10 place-items-center rounded-full bg-[#101612] text-white">
@@ -239,12 +279,13 @@ function Group({
   children: React.ReactNode;
 }) {
   return (
-    <section>
-      <div className="mb-5 flex items-center gap-3">
-        <span className="grid size-8 place-items-center rounded-full bg-white/10 font-display text-[11px] font-bold">
+    <section className="reveal">
+      <div className="mb-6 flex items-center gap-4">
+        <span className="grid size-9 place-items-center rounded-full border border-white/20 bg-gradient-to-b from-white/20 to-white/5 font-display text-[11px] font-bold shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]">
           {number}
         </span>
         <h2 className="font-display text-xl font-extrabold tracking-tight">{title}</h2>
+        <span aria-hidden="true" className="h-px flex-1 bg-gradient-to-r from-white/20 to-transparent" />
       </div>
       {children}
     </section>

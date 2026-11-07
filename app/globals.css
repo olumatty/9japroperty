@@ -217,3 +217,29 @@ button:disabled {
     transition: none;
   }
 }
+
+/* Light sweep across a button on hover */
+.shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 30%,
+    rgb(16 22 18 / 0.12) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+
+.shine:hover::after {
+  transform: translateX(120%);
+  transition: transform 0.8s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shine:hover::after {
+    transition: none;
+  }
+}

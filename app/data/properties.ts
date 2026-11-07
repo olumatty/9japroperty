@@ -8,7 +8,7 @@ export const properties: Property[] = [
     type: "House",
     priceNote:
       "3 Bed Apartment ₦700M · 4 Bed Apartment ₦1B · 3 Bed Penthouse ₦1.3B · 4 Bed Penthouse ₦1.5B",
-    image: "/properties/shonibare-estate.jpg",
+    image: "/properties/shonibare-estate.webp",
   },
   {
     id: "ogudu-gra",
@@ -16,7 +16,7 @@ export const properties: Property[] = [
     location: "Ogudu GRA, Lagos",
     type: "House",
     price: "₦550M",
-    image: "/properties/ogudu-gra.jpg",
+    image: "/properties/ogudu-gra.webp",
   },
   {
     id: "ojodu-berger",
@@ -24,6 +24,6 @@ export const properties: Property[] = [
     location: "Ojodu Berger, Lagos",
     type: "House",
     price: "₦315M",
-    image: "/properties/ojodu-berger.jpg",
+    image: "/properties/ojodu-berger.webp",
   },
 ];

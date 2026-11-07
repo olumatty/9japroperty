@@ -85,3 +85,135 @@ button:disabled {
     animation: none;
   }
 }
+
+/* Footer motion */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgb(16 22 18 / 0.45);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 12px rgb(16 22 18 / 0);
+  }
+}
+
+/* Scroll-triggered reveal (browsers without scroll timelines just show content) */
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation: fade-up linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 45%;
+  }
+}
+
+/* Sliding underline for text links */
+.link-slide {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  padding-bottom: 2px;
+  transition: background-size 0.35s ease;
+}
+
+.link-slide:hover {
+  background-size: 100% 1px;
+}
+
+/* Arrow circle nudges on button hover */
+.arrow-nudge svg {
+  transition: transform 0.25s ease;
+}
+
+.arrow-nudge:hover svg {
+  transform: translate(2px, -2px);
+}
+
+.pulse-ring {
+  animation: pulse-ring 2.2s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .pulse-ring {
+    animation: none;
+  }
+  .link-slide,
+  .arrow-nudge svg {
+    transition: none;
+  }
+}
+
+/* Page-wide motion */
+
+/* Staggered scroll reveal: set style={{ "--i": index }} on siblings */
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation-range: entry calc(var(--i, 0) * 6%)
+      entry calc(45% + var(--i, 0) * 6%);
+  }
+}
+
+/* Load-time entrance, staggered with --d */
+.rise {
+  animation: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--d, 0) * 120ms);
+}
+
+/* Slow zoom on hero background */
+@keyframes slow-zoom {
+  from {
+    transform: scale(1.08);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.hero-bg {
+  animation: slow-zoom 2.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Card hover: border/background only (transform is owned by reveal) */
+.card-hover {
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
+.card-hover:hover {
+  border-color: rgb(255 255 255 / 0.25);
+  background-color: #243029;
+}
+
+/* Photo zoom on card hover */
+.img-zoom {
+  overflow: hidden;
+}
+
+.img-zoom > div {
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card-hover:hover .img-zoom > div {
+  transform: scale(1.06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise,
+  .hero-bg {
+    animation: none;
+  }
+  .img-zoom > div {
+    transition: none;
+  }
+}

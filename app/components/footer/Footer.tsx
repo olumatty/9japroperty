@@ -71,6 +71,9 @@ export function Footer() {
                 <li key={link.label}>
                   <Link
                     href={link.href}
+                    {...(link.href.startsWith("http")
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
                     className="link-slide text-[16px] font-semibold"
                   >
                     {link.label}

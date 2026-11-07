@@ -45,7 +45,7 @@ export function PropertyCard({
           href={`/properties/${property.id}`}
           className="arrow-nudge mt-1 inline-flex h-[52px] w-fit items-center gap-4 rounded-full bg-white pl-6 pr-2 text-[15px] font-semibold text-[#101612] transition hover:bg-white/90"
         >
-          Enquire
+          View details
           <span className="grid size-9 place-items-center rounded-full bg-[#101612] text-white">
             <ArrowIcon className="size-4" />
           </span>

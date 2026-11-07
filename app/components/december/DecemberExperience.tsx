@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { decemberEnquiryHref, shortletEnquiryHref } from "@/app/data/contact";
 import { decemberSteps } from "@/app/data/december-steps";
 import { ArrowIcon } from "@/app/components/ui/ArrowIcon";
 import { labelClass } from "@/app/lib/styles";
@@ -61,7 +62,9 @@ export function DecemberExperience() {
 
       <div className="reveal mt-8 flex flex-col items-start gap-[18px]">
         <Link
-          href="#consultation"
+          href={decemberEnquiryHref}
+          target="_blank"
+          rel="noopener noreferrer"
           className="arrow-nudge inline-flex h-[52px] items-center gap-4 rounded-full bg-white pl-6 pr-2 text-[15px] font-semibold text-[#101612] transition hover:bg-white/90"
         >
           Plan my December stay
@@ -70,7 +73,9 @@ export function DecemberExperience() {
           </span>
         </Link>
         <Link
-          href="#shortlets"
+          href={shortletEnquiryHref}
+          target="_blank"
+          rel="noopener noreferrer"
           className="arrow-nudge inline-flex h-[52px] items-center gap-4 rounded-full border border-white/10 bg-surface pl-6 pr-2 text-[15px] font-semibold transition hover:bg-[#243029]"
         >
           Explore shortlets

@@ -5,6 +5,8 @@ import { Approach } from "@/app/components/approach/Approach";
 import { Services } from "@/app/components/services/Services";
 import { SellCta } from "@/app/components/sell/SellCta";
 import { Ebook } from "@/app/components/ebook/Ebook";
+import { Testimonials } from "@/app/components/testimonials/Testimonials";
+import { Faq } from "@/app/components/faq/Faq";
 import { Footer } from "@/app/components/footer/Footer";
 
 export default function Home() {
@@ -18,6 +20,8 @@ export default function Home() {
         <Services />
         <SellCta />
         <Ebook />
+        <Testimonials />
+        <Faq />
       </main>
       <Footer />
     </>

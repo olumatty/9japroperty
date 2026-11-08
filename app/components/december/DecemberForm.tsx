@@ -4,11 +4,31 @@ import { useEffect, useRef, useState } from "react";
 import { budgets, cities, guestOptions, wants } from "@/app/data/december";
 import { whatsappLink } from "@/app/data/contact";
 import { ArrowIcon } from "@/app/components/ui/ArrowIcon";
-import { Field, Group, field } from "@/app/components/ui/FormParts";
+import { DraftNotice, Field, FieldError, Group, field } from "@/app/components/ui/FormParts";
+import {
+  fullName,
+  phone,
+  required,
+  useFormDraft,
+  useFormValidation,
+  type Rules,
+} from "@/app/lib/forms";
 import { labelClass } from "@/app/lib/styles";
 
 const chip =
-  "inline-flex h-11 select-none items-center rounded-full border border-white/15 bg-background px-5 text-[14px] font-semibold transition duration-300 hover:-translate-y-0.5 hover:border-white/50 peer-checked:-translate-y-0.5 peer-checked:border-white peer-checked:bg-white peer-checked:text-[#101612] peer-checked:shadow-[0_10px_28px_-8px_rgba(255,255,255,0.45)] peer-focus-visible:ring-2 peer-focus-visible:ring-white/60";
+  "inline-flex h-11 select-none items-center rounded-full border border-white/15 bg-background px-5 text-[14px] font-semibold transition duration-300 hover:-translate-y-0.5 hover:border-white/50 peer-checked:-translate-y-0.5 peer-checked:border-white peer-checked:bg-white peer-checked:text-[#101612] peer-checked:shadow-[0_10px_28px_-8px_rgba(255,255,255,0.45)] peer-focus-visible:ring-2 peer-focus-visible:ring-white/60 peer-aria-[invalid=true]:border-red-400/70";
+
+const rules: Rules = {
+  name: fullName,
+  phone,
+  arrival: required("Please choose your arrival date."),
+  departure: (v, data) => {
+    const arrival = String(data.get("arrival") ?? "");
+    if (v && arrival && v < arrival) return "Your leaving date can’t be before you arrive.";
+  },
+  guests: required("Please choose how many guests."),
+  budget: required("Please choose a budget, or pick Flexible."),
+};
 
 function formatDate(value: string) {
   if (!value) return "";
@@ -63,12 +83,18 @@ export function DecemberForm() {
   const formRef = useRef<HTMLFormElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
 
+  const { errors, validateAll, clearErrors, onBlur, onChange } = useFormValidation(formRef, rules);
+  const { restored, clearDraft } = useFormDraft(formRef, "december-form-draft", (draft) => {
+    setArrival(draft.arrival?.[0] ?? "");
+  });
+
   useEffect(() => {
     if (sent) successRef.current?.focus();
   }, [sent]);
 
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!validateAll()) return;
     const data = new FormData(event.currentTarget);
     const get = (key: string) => String(data.get(key) ?? "").trim();
     const href = whatsappLink(buildMessage(data));
@@ -84,11 +110,14 @@ export function DecemberForm() {
       budget: get("budget"),
     });
     window.open(href, "_blank", "noopener,noreferrer");
+    clearDraft();
   }
 
   function startOver() {
     formRef.current?.reset();
     setArrival("");
+    clearDraft();
+    clearErrors();
     setSent(null);
   }
 
@@ -162,18 +191,32 @@ export function DecemberForm() {
       <form
         ref={formRef}
         onSubmit={onSubmit}
+        onBlur={onBlur}
+        onChange={onChange}
+        noValidate
         hidden={sent !== null}
         className="relative flex flex-col gap-10 overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-[#26322a] via-surface to-[#18211b] p-6 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.7)] sm:p-10"
       >
         <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-white/[0.07] blur-3xl" />
         <div aria-hidden="true" className="pointer-events-none absolute -bottom-32 -left-24 size-72 rounded-full bg-emerald-300/[0.06] blur-3xl" />
 
+        {restored && (
+          <DraftNotice
+            onClear={() => {
+              formRef.current?.reset();
+              setArrival("");
+              clearDraft();
+              clearErrors();
+            }}
+          />
+        )}
+
         <Group number="01" title="About you">
           <div className="grid gap-5 sm:grid-cols-2">
-            <Field label="Full name" htmlFor="name">
+            <Field label="Full name" htmlFor="name" error={errors.name}>
               <input id="name" name="name" required autoComplete="name" className={field} placeholder="Your full name" />
             </Field>
-            <Field label="Phone / WhatsApp" htmlFor="phone">
+            <Field label="Phone / WhatsApp" htmlFor="phone" error={errors.phone}>
               <input id="phone" name="phone" type="tel" required autoComplete="tel" className={field} placeholder="+44 …" />
             </Field>
             <div className="sm:col-span-2">
@@ -186,7 +229,7 @@ export function DecemberForm() {
 
         <Group number="02" title="Your trip">
           <div className="grid gap-5 sm:grid-cols-2">
-            <Field label="Arriving" htmlFor="arrival">
+            <Field label="Arriving" htmlFor="arrival" error={errors.arrival}>
               <input
                 id="arrival"
                 name="arrival"
@@ -197,7 +240,7 @@ export function DecemberForm() {
                 className={`${field} [color-scheme:dark]`}
               />
             </Field>
-            <Field label="Leaving" htmlFor="departure">
+            <Field label="Leaving" htmlFor="departure" error={errors.departure}>
               <input
                 id="departure"
                 name="departure"
@@ -218,6 +261,7 @@ export function DecemberForm() {
                 </label>
               ))}
             </div>
+            <FieldError name="guests" error={errors.guests} className="mt-3" />
           </fieldset>
 
           <fieldset className="mt-6">
@@ -244,6 +288,7 @@ export function DecemberForm() {
                 </label>
               ))}
             </div>
+            <FieldError name="budget" error={errors.budget} className="mt-3" />
           </fieldset>
           <div className="mt-5 max-w-[420px]">
             <Field label="Or tell us your own budget (optional)" htmlFor="budgetCustom">

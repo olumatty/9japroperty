@@ -6,6 +6,7 @@ import { propertyEnquiryHref } from "@/app/data/contact";
 import { ArrowIcon } from "@/app/components/ui/ArrowIcon";
 import { MobileEnquireBar } from "@/app/components/properties/MobileEnquireBar";
 import { PropertyGallery } from "@/app/components/properties/PropertyGallery";
+import { PropertyCard } from "@/app/components/properties/PropertyCard";
 import { PropertyFeatures } from "@/app/components/properties/PropertyFeatures";
 import { Footer } from "@/app/components/footer/Footer";
 import { labelClass } from "@/app/lib/styles";
@@ -34,6 +35,12 @@ export default async function PropertyPage({ params }: Props) {
   const { title, location, type, price, priceNote, image, gallery, summary, features, facts } =
     property;
   const enquiryHref = propertyEnquiryHref(title);
+
+  // Other listings, same city first, up to three.
+  const others = properties
+    .filter((p) => p.id !== property.id)
+    .sort((a, b) => Number(b.city === property.city) - Number(a.city === property.city))
+    .slice(0, 3);
 
   const hasContent = Boolean(summary || (features && features.length > 0));
 
@@ -153,6 +160,24 @@ export default async function PropertyPage({ params }: Props) {
             </p>
           </section>
         </div>
+
+        {others.length > 0 && (
+          <section className="mt-20 border-t border-white/10 pt-12" aria-labelledby="more-title">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <h2 id="more-title" className="text-4xl leading-none sm:text-5xl">
+                More properties
+              </h2>
+              <Link href="/#properties" className="link-slide text-[15px] font-semibold">
+                View all properties
+              </Link>
+            </div>
+            <div className="mt-8 grid grid-cols-1 items-start gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {others.map((p, i) => (
+                <PropertyCard key={p.id} property={p} index={i} />
+              ))}
+            </div>
+          </section>
+        )}
       </main>
       <Footer />
       <div aria-hidden="true" className="h-[76px] md:hidden" />

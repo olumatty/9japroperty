@@ -5,7 +5,16 @@ import { propertyTypes } from "@/app/data/sell";
 import { whatsappLink } from "@/app/data/contact";
 import { ArrowIcon } from "@/app/components/ui/ArrowIcon";
 import { labelClass } from "@/app/lib/styles";
-import { Field, Group, field } from "@/app/components/ui/FormParts";
+import { DraftNotice, Field, FieldError, Group, field } from "@/app/components/ui/FormParts";
+import {
+  fullName,
+  optionalEmail,
+  phone,
+  required,
+  useFormDraft,
+  useFormValidation,
+  type Rules,
+} from "@/app/lib/forms";
 
 function buildMessage(data: FormData) {
   const get = (key: string) => String(data.get(key) ?? "").trim();
@@ -29,12 +38,30 @@ function buildMessage(data: FormData) {
   return ["Hello The9jaPropertyChic, I'd like to sell a property.", "", ...lines].join("\n");
 }
 
+const rules: Rules = {
+  name: fullName,
+  phone,
+  type: required("Please choose what you are selling."),
+  location: required("Please tell us where the property is."),
+  email: optionalEmail,
+};
+
+const optionalFields = ["email", "residence", "bedrooms", "documents", "details"];
+
 type Sent = { href: string; name: string; type: string; location: string; files: boolean };
 
 export function SellForm() {
   const [sent, setSent] = useState<Sent | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
+
+  const { errors, validateAll, clearErrors, onBlur, onChange } = useFormValidation(formRef, rules);
+  const { restored, clearDraft } = useFormDraft(formRef, "sell-form-draft", (draft) => {
+    // Re-open "Add more details" if the draft used it.
+    if (optionalFields.some((name) => draft[name])) {
+      formRef.current?.querySelector("details")?.setAttribute("open", "");
+    }
+  });
 
   // Move focus to the confirmation so screen readers announce it.
   useEffect(() => {
@@ -43,6 +70,7 @@ export function SellForm() {
 
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!validateAll()) return;
     const data = new FormData(event.currentTarget);
     const href = whatsappLink(buildMessage(data));
     const get = (key: string) => String(data.get(key) ?? "").trim();
@@ -55,10 +83,13 @@ export function SellForm() {
       files: data.get("files") !== null,
     });
     window.open(href, "_blank", "noopener,noreferrer");
+    clearDraft();
   }
 
   function startOver() {
     formRef.current?.reset();
+    clearDraft();
+    clearErrors();
     setSent(null);
   }
 
@@ -141,6 +172,9 @@ export function SellForm() {
     <form
       ref={formRef}
       onSubmit={onSubmit}
+      onBlur={onBlur}
+      onChange={onChange}
+      noValidate
       hidden={sent !== null}
       className="relative flex flex-col gap-10 overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-[#26322a] via-surface to-[#18211b] p-6 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.7)] sm:p-10"
     >
@@ -148,13 +182,15 @@ export function SellForm() {
       <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-white/[0.07] blur-3xl" />
       <div aria-hidden="true" className="pointer-events-none absolute -bottom-32 -left-24 size-72 rounded-full bg-emerald-300/[0.06] blur-3xl" />
 
+      {restored && <DraftNotice onClear={() => { formRef.current?.reset(); clearDraft(); clearErrors(); }} />}
+
       {/* Step 1 */}
       <Group number="01" title="Your details">
         <div className="grid gap-5 sm:grid-cols-2">
-          <Field label="Full name" htmlFor="name">
+          <Field label="Full name" htmlFor="name" error={errors.name}>
             <input id="name" name="name" required autoComplete="name" className={field} placeholder="Your full name" />
           </Field>
-          <Field label="Phone / WhatsApp" htmlFor="phone">
+          <Field label="Phone / WhatsApp" htmlFor="phone" error={errors.phone}>
             <input id="phone" name="phone" type="tel" required autoComplete="tel" className={field} placeholder="+234 …" />
           </Field>
         </div>
@@ -174,16 +210,17 @@ export function SellForm() {
                   required={i === 0}
                   className="peer sr-only"
                 />
-                <span className="inline-flex h-11 select-none items-center rounded-full border border-white/15 bg-background px-5 text-[14px] font-semibold transition duration-300 hover:-translate-y-0.5 hover:border-white/50 peer-checked:-translate-y-0.5 peer-checked:border-white peer-checked:bg-white peer-checked:text-[#101612] peer-checked:shadow-[0_10px_28px_-8px_rgba(255,255,255,0.45)] peer-focus-visible:ring-2 peer-focus-visible:ring-white/60">
+                <span className="inline-flex h-11 select-none items-center rounded-full border border-white/15 bg-background px-5 text-[14px] font-semibold transition duration-300 hover:-translate-y-0.5 hover:border-white/50 peer-checked:-translate-y-0.5 peer-checked:border-white peer-checked:bg-white peer-checked:text-[#101612] peer-checked:shadow-[0_10px_28px_-8px_rgba(255,255,255,0.45)] peer-focus-visible:ring-2 peer-focus-visible:ring-white/60 peer-aria-[invalid=true]:border-red-400/70">
                   {type}
                 </span>
               </label>
             ))}
           </div>
+          <FieldError name="type" error={errors.type} className="mt-1" />
         </fieldset>
 
         <div className="mt-5 grid gap-5 sm:grid-cols-2">
-          <Field label="Where is it?" htmlFor="location">
+          <Field label="Where is it?" htmlFor="location" error={errors.location}>
             <input id="location" name="location" required className={field} placeholder="Area, city, state" />
           </Field>
           <Field label="Asking price (optional)" htmlFor="price">
@@ -224,7 +261,7 @@ export function SellForm() {
         </summary>
 
         <div className="grid gap-5 px-5 pb-6 pt-2 group-open:animate-[fade-up_0.45s_ease_both] sm:grid-cols-2">
-          <Field label="Email" htmlFor="email">
+          <Field label="Email" htmlFor="email" error={errors.email}>
             <input id="email" name="email" type="email" autoComplete="email" className={field} placeholder="you@example.com" />
           </Field>
           <Field label="Where do you live?" htmlFor="residence">

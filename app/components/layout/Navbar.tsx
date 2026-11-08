@@ -49,8 +49,8 @@ export function Navbar() {
           : "border-b border-transparent bg-background"
       }`}
     >
-      <div className="mx-auto flex h-[72px] w-full max-w-[1480px] items-center justify-between gap-6 px-4 sm:px-5 lg:px-6">
-        <Link href="/" className="font-display text-lg font-extrabold">
+      <div className="mx-auto flex h-[72px] w-full max-w-[1480px] items-center justify-between gap-3 sm:gap-6 px-4 sm:px-5 lg:px-6">
+        <Link href="/" className="font-display text-base sm:text-lg font-extrabold">
           The9jaPropertyChic
         </Link>
 

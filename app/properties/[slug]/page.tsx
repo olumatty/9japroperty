@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { getProperty, properties } from "@/app/data/properties";
 import { propertyEnquiryHref } from "@/app/data/contact";
 import { ArrowIcon } from "@/app/components/ui/ArrowIcon";
+import { MobileEnquireBar } from "@/app/components/properties/MobileEnquireBar";
 import { Footer } from "@/app/components/footer/Footer";
 import { labelClass } from "@/app/lib/styles";
 
@@ -168,6 +169,8 @@ export default async function PropertyPage({ params }: Props) {
         </section>
       </main>
       <Footer />
+      <div aria-hidden="true" className="h-[76px] md:hidden" />
+      <MobileEnquireBar title={title} price={price} href={enquiryHref} />
     </>
   );
 }

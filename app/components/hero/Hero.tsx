@@ -78,16 +78,24 @@ export function Hero() {
         <ul className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
           {regions.map((region, i) => (
             <li
-              key={region}
+              key={region.slug}
               style={{ "--i": i } as React.CSSProperties}
-              className="wave-card flex min-h-[120px] flex-col justify-between rounded-2xl border border-white/10 bg-surface p-5"
+              className="wave-card rounded-2xl border border-white/10 bg-surface transition-colors duration-300 hover:border-white/30 hover:bg-[#243029]"
             >
-              <span className="font-display text-[11px] font-bold tracking-widest text-white/50">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <span className="font-display text-[22px] font-bold leading-tight">
-                {region}
-              </span>
+              <Link
+                href={`/regions/${region.slug}`}
+                className="flex h-full min-h-[120px] flex-col justify-between p-5"
+              >
+                <span className="flex items-start justify-between">
+                  <span className="font-display text-[11px] font-bold tracking-widest text-white/50">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <ArrowIcon className="size-4 text-white/60" />
+                </span>
+                <span className="font-display text-[22px] font-bold leading-tight">
+                  {region.name}
+                </span>
+              </Link>
             </li>
           ))}
         </ul>

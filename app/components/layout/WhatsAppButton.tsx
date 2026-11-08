@@ -1,13 +1,19 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import { contact } from "@/app/data/contact";
 
 export function WhatsAppButton() {
+  const onProperty = usePathname().startsWith("/properties/");
   return (
     <a
       href={contact.enquiryHref}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with us on WhatsApp"
-      className="wa-pulse group fixed bottom-5 right-5 z-40 flex h-14 items-center overflow-hidden rounded-full bg-[#25D366] text-[#07130c] shadow-[0_12px_30px_-8px_rgba(0,0,0,0.6)] transition duration-300 hover:-translate-y-1 sm:bottom-6 sm:right-6"
+      className={`wa-pulse group fixed bottom-5 right-5 z-40 flex h-14 items-center overflow-hidden rounded-full bg-[#25D366] text-[#07130c] shadow-[0_12px_30px_-8px_rgba(0,0,0,0.6)] transition duration-300 hover:-translate-y-1 sm:bottom-6 sm:right-6 ${
+        onProperty ? "max-md:hidden" : ""
+      }`}
     >
       <span className="grid size-14 shrink-0 place-items-center">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="size-7">

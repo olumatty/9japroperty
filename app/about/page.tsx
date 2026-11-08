@@ -29,14 +29,14 @@ export default function AboutPage() {
           Back to home
         </Link>
 
-        <section className="mt-10 grid items-center gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
+        <section className="mt-10 grid grid-cols-[minmax(0,1fr)] items-center gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
           <div>
             <p className={`${labelClass} rise`} style={delay(1)}>
               {about.roles}
             </p>
 
             <h1
-              className="rise mt-6 text-5xl leading-[1.02] sm:text-6xl lg:text-[72px]"
+              className="rise mt-6 text-[34px] leading-[1.05] sm:text-6xl lg:text-[72px]"
               style={delay(2)}
             >
               {about.heading}

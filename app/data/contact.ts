@@ -18,10 +18,6 @@ export const shortletEnquiryHref = waLink(
   "Hello The9jaPropertyChic, I'd like to book a shortlet. My dates are: ___ and the number of guests is: ___.",
 );
 
-export const decemberEnquiryHref = waLink(
-  "Hello The9jaPropertyChic, I'm coming home this December and I'd like help planning my stay.",
-);
-
 export const exploreLinks = [
   { label: "Sell your property", href: "/sell" },
   { label: "About", href: "/about" },

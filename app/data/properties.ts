@@ -15,6 +15,12 @@ export const properties: Property[] = [
       "/properties/shonibare-estate/living-room.webp",
       "/properties/shonibare-estate/lounge.webp",
     ],
+    facts: [
+      { label: "Bedrooms", value: "3 & 4" },
+      { label: "Property type", value: "Apartments & penthouses" },
+      { label: "Boys’ quarters", value: "Yes" },
+      { label: "Title", value: "Certificate of Occupancy" },
+    ],
     summary:
       "Exquisitely built apartments and penthouses with BQ in a prime location. Title: Certificate of Occupancy.",
     features: [
@@ -38,6 +44,11 @@ export const properties: Property[] = [
     city: "Lagos",
     type: "House",
     price: "₦550M",
+    facts: [
+      { label: "Bedrooms", value: "4" },
+      { label: "Property type", value: "Terrace duplex" },
+      { label: "Boys’ quarters", value: "Yes" },
+    ],
     image: "/properties/ogudu-gra.webp",
   },
   {
@@ -47,6 +58,11 @@ export const properties: Property[] = [
     city: "Lagos",
     type: "House",
     price: "₦315M",
+    facts: [
+      { label: "Bedrooms", value: "5" },
+      { label: "Property type", value: "Fully detached duplex" },
+      { label: "Boys’ quarters", value: "Yes" },
+    ],
     image: "/properties/ojodu-berger.webp",
   },
 ];

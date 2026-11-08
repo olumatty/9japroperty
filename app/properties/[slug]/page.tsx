@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProperty, properties } from "@/app/data/properties";
 import { propertyEnquiryHref } from "@/app/data/contact";
 import { ArrowIcon } from "@/app/components/ui/ArrowIcon";
 import { MobileEnquireBar } from "@/app/components/properties/MobileEnquireBar";
+import { PropertyGallery } from "@/app/components/properties/PropertyGallery";
+import { PropertyFeatures } from "@/app/components/properties/PropertyFeatures";
 import { Footer } from "@/app/components/footer/Footer";
 import { labelClass } from "@/app/lib/styles";
 
@@ -30,9 +31,21 @@ export default async function PropertyPage({ params }: Props) {
   const property = getProperty(slug);
   if (!property) notFound();
 
-  const { title, location, type, price, priceNote, image, gallery, summary, features } =
+  const { title, location, type, price, priceNote, image, gallery, summary, features, facts } =
     property;
   const enquiryHref = propertyEnquiryHref(title);
+
+  const hasContent = Boolean(summary || (features && features.length > 0));
+
+  // "3 Bed Apartment ₦700M · 4 Bed ..." -> [{ name, price }] rows
+  const options = priceNote
+    ? priceNote.split(" · ").flatMap((part) => {
+        const m = part.match(/^(.*?)\s*(₦[\d.,]+\s?[KMB]?)$/i);
+        return m ? [{ name: m[1], price: m[2] }] : [];
+      })
+    : price
+      ? [{ name: "", price }]
+      : [];
 
   return (
     <>
@@ -62,111 +75,84 @@ export default async function PropertyPage({ params }: Props) {
           </span>
         </p>
 
-        {/* Main image */}
+        <PropertyGallery title={title} images={[image, ...(gallery ?? [])]} />
+
         <div
-          className="rise relative mt-8 h-[320px] overflow-hidden rounded-[32px] bg-surface sm:h-[480px] lg:h-[640px]"
-          style={{ "--d": 3 } as React.CSSProperties}
+          className={`mt-8 grid items-start gap-8 ${
+            hasContent ? "lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-12" : "max-w-[520px]"
+          }`}
         >
-          <Image
-            src={image}
-            alt={title}
-            fill
-            preload
-            sizes="(min-width: 1480px) 1432px, 100vw"
-            className="object-cover"
-          />
-        </div>
-
-        {/* Extra images: any number, compact thumbnails */}
-        {gallery && gallery.length > 0 && (
-          <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-3">
-            {gallery.map((src, i) => (
-              <div
-                key={src}
-                className="reveal relative h-[160px] overflow-hidden rounded-[20px] bg-surface sm:h-[220px] lg:h-[260px]"
-                style={{ "--i": i } as React.CSSProperties}
-              >
-                <Image
-                  src={src}
-                  alt={`${title} – photo ${i + 2}`}
-                  fill
-                  sizes="(min-width: 768px) 33vw, 50vw"
-                  className="object-cover"
-                />
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Details card */}
-        <section className="reveal mt-6 rounded-[32px] bg-surface p-6 sm:p-10 lg:p-12">
-          {priceNote && (
-            <p className="max-w-[1100px] font-display text-xl font-extrabold leading-snug sm:text-2xl">
-              {priceNote}
+          {/* One card: price, facts and enquiry */}
+          <aside className={`reveal order-first rounded-[28px] border border-white/10 bg-surface p-6 sm:p-8 ${hasContent ? "lg:sticky lg:top-28 lg:order-last" : ""}`}>
+            <p className={`${labelClass} text-white/50`}>
+              {options.length > 1 ? "Pricing" : "Price"}
             </p>
-          )}
-          {price && (
-            <p className="font-display text-2xl font-extrabold sm:text-3xl">{price}</p>
-          )}
 
-          {summary && (
-            <p className="mt-8 max-w-[1100px] text-[16px] font-medium leading-7">
-              {summary}
-            </p>
-          )}
-
-          {features && features.length > 0 && (
-            <div className="mt-12">
-              <div className="flex items-center gap-4">
-                <h2 className="text-4xl leading-none sm:text-5xl">Property features</h2>
-                <span className="rounded-full border border-white/20 px-3 py-1 font-display text-[11px] font-bold tracking-widest">
-                  {String(features.length).padStart(2, "0")}
-                </span>
-                <span aria-hidden="true" className="hidden h-px flex-1 bg-gradient-to-r from-white/20 to-transparent sm:block" />
-              </div>
-
-              <ul className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {features.map((feature, i) => (
+            {options.length > 0 ? (
+              <ul className="mt-4 flex flex-col">
+                {options.map((o) => (
                   <li
-                    key={feature}
-                    style={{ "--i": i % 4 } as React.CSSProperties}
-                    className="reveal group flex items-center gap-3 rounded-2xl border border-white/10 bg-background/50 px-4 py-4 text-[15px] font-semibold transition-colors duration-300 hover:border-white/30 hover:bg-background/80"
+                    key={o.name + o.price}
+                    className="flex items-baseline justify-between gap-4 border-b border-white/10 py-3 first:pt-0 last:border-b-0"
                   >
-                    <span className="grid size-8 shrink-0 place-items-center rounded-full bg-white text-[#101612] transition-transform duration-300 group-hover:scale-110">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="size-4" aria-hidden="true">
-                        <path d="m5 12.5 4.5 4.5L19 7.5" />
-                      </svg>
-                    </span>
-                    {feature}
+                    {o.name && (
+                      <span className="text-[14px] font-medium text-white/70">{o.name}</span>
+                    )}
+                    <span className={`${o.name ? "ml-auto" : ""} font-serif text-[34px] leading-none`}>{o.price}</span>
                   </li>
                 ))}
               </ul>
-            </div>
-          )}
+            ) : (
+              <p className="mt-4 font-serif text-[28px] leading-tight">{priceNote}</p>
+            )}
 
-          <p className="mt-10 max-w-[1100px] text-[16px] font-medium leading-7">
-            Enquire to confirm status, current pricing and viewing arrangements.
-            Please include the property name in your message.
-          </p>
+            <dl className="mt-6 border-t border-white/10 pt-2">
+              {[{ label: "Location", value: location }, ...(facts ?? [])].map((fact) => (
+                <div
+                  key={fact.label}
+                  className="flex items-baseline justify-between gap-6 py-2.5"
+                >
+                  <dt className="text-[14px] font-medium text-white/60">{fact.label}</dt>
+                  <dd className="text-right text-[14px] font-semibold">{fact.value}</dd>
+                </div>
+              ))}
+            </dl>
 
-          <Link
-            href={enquiryHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="arrow-nudge mt-8 inline-flex h-[52px] items-center gap-4 rounded-full bg-white pl-6 pr-2 text-[15px] font-semibold text-[#101612] transition hover:bg-white/90"
-          >
-            Enquire on WhatsApp
-            <span className="grid size-9 place-items-center rounded-full bg-[#101612] text-white">
-              <ArrowIcon className="size-4" />
-            </span>
-          </Link>
+            <Link
+              href={enquiryHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="arrow-nudge mt-6 inline-flex h-[56px] w-full items-center justify-between gap-4 rounded-full bg-white pl-7 pr-2 text-[15px] font-semibold text-[#101612] transition hover:bg-white/90"
+            >
+              Enquire on WhatsApp
+              <span className="grid size-10 place-items-center rounded-full bg-[#101612] text-white">
+                <ArrowIcon className="size-4" />
+              </span>
+            </Link>
+            <p className="mt-3 text-center text-[12px] font-medium text-white/50">
+              Confirm status, pricing and viewing times.
+            </p>
+          </aside>
 
-          <p className="mt-8 max-w-[1100px] text-[14px] font-medium leading-6 text-white/80">
-            Property information, pricing and availability are subject to
-            change. Conduct appropriate due diligence and obtain professional
-            advice before completing a transaction.
-          </p>
-        </section>
+          {/* Description + features */}
+          <section>
+            {summary && (
+              <p className="max-w-[760px] text-[17px] font-medium leading-8">{summary}</p>
+            )}
+
+            {features && features.length > 0 && (
+              <div className={summary ? "mt-8" : ""}>
+                <PropertyFeatures features={features} />
+              </div>
+            )}
+
+            <p className="mt-10 max-w-[760px] text-[13px] font-medium leading-6 text-white/60">
+              Property information, pricing and availability are subject to
+              change. Conduct appropriate due diligence and obtain professional
+              advice before completing a transaction.
+            </p>
+          </section>
+        </div>
       </main>
       <Footer />
       <div aria-hidden="true" className="h-[76px] md:hidden" />

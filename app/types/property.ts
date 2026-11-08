@@ -13,6 +13,8 @@ export type Property = {
   image: string;
   /** Extra detail-page images (interior, exterior, etc.) */
   gallery?: string[];
+  /** Key facts shown as tiles under the photos */
+  facts?: { label: string; value: string }[];
   /** Short description shown on the detail page */
   summary?: string;
   /** Feature list shown on the detail page */

@@ -19,4 +19,11 @@ export const categories = [
   },
 ] as const;
 
+export function getCategory(slug: string) {
+  return categories.find((c) => c.slug === slug);
+}
+
+/** How many properties each category shows on the home page before "See more". */
+export const HOME_LIMIT = 3;
+
 export type CategoryName = (typeof categories)[number]["name"];

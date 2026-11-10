@@ -27,19 +27,30 @@ const bath = (<svg {...s}><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3ZM
 const balcony = (<svg {...s}><path d="M3 10h18M5 10v9M9 10v9M15 10v9M19 10v9M3 19h18M7 10V6h10v4" /></svg>);
 const trend = (<svg {...s}><path d="m4 16 5-5 4 4 7-8M14 7h6v6" /></svg>);
 const drop = (<svg {...s}><path d="M12 3s6 6.500 6 11a6 6 0 0 1-12 0c0-4.500 6-11 6-11Z" /></svg>);
+const bulb = (<svg {...s}><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.500 10.900c.700.600 1 1.300 1 2.100h5c0-.800.300-1.500 1-2.100A6 6 0 0 0 12 3Z" /></svg>);
+const bed = (<svg {...s}><path d="M3 18V7M3 14h18v4M21 14v-2a3 3 0 0 0-3-3h-7v5" /><circle cx="7" cy="11" r="1.500" /></svg>);
+const sofa = (<svg {...s}><path d="M5 11V8a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v3M3 13a2 2 0 0 1 4 0v2h10v-2a2 2 0 0 1 4 0v5H3v-5ZM6 18v2M18 18v2" /></svg>);
+const floor = (<svg {...s}><path d="M3 8l9-4 9 4-9 4-9-4ZM3 8v4l9 4 9-4V8M3 12v4l9 4 9-4v-4" /></svg>);
+const home = (<svg {...s}><path d="M3 11.500 12 4l9 7.500M6 10v10h12V10M10 20v-5h4v5" /></svg>);
 const tick = (<svg {...s}><path d="m5 12.5 4.5 4.5L19 7.5" /></svg>);
 
 const rules: [RegExp, React.ReactNode][] = [
+  [/water closet|\bwc\b/i, bath],
   [/power|generator|inverter|solar/i, bolt],
   [/pool/i, pool],
   [/gym/i, gym],
   [/elevator|lift/i, lift],
   [/parking|garage/i, car],
   [/smart|wifi|internet/i, smart],
-  [/kitchen/i, kitchen],
+  [/kitchen|dining/i, kitchen],
   [/wardrobe|closet/i, wardrobe],
   [/water heater|heater/i, heater],
-  [/en-?suite|toilet|bath/i, bath],
+  [/en-?suite|toilet|bath|shower/i, bath],
+  [/spotlight|lighting/i, bulb],
+  [/guest room|bedroom/i, bed],
+  [/lounge|sofa|living/i, sofa],
+  [/floor|tile/i, floor],
+  [/^bq$|boys/i, home],
   [/balcon/i, balcony],
   [/invest/i, trend],
   [/water/i, drop],

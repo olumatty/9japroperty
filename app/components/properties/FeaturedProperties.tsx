@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { categories } from "@/app/data/categories";
+import { HOME_LIMIT, categories } from "@/app/data/categories";
 import { whatsappLink } from "@/app/data/contact";
 import { properties } from "@/app/data/properties";
+import { ArrowIcon } from "@/app/components/ui/ArrowIcon";
 import { PropertyCard } from "./PropertyCard";
 import { labelClass } from "@/app/lib/styles";
 
@@ -61,13 +62,32 @@ export function FeaturedProperties() {
                 </span>
               </div>
 
-              {list.length > 0 ? (
+              {list.length > 0 && (
                 <div className="mt-8 grid grid-cols-1 items-start gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {list.map((property, i) => (
+                  {list.slice(0, HOME_LIMIT).map((property, i) => (
                     <PropertyCard key={property.id} property={property} index={i} />
                   ))}
                 </div>
-              ) : (
+              )}
+
+              {list.length > HOME_LIMIT && (
+                <div className="mt-8 flex justify-center">
+                  <Link
+                    href={`/categories/${category.slug}`}
+                    className="arrow-nudge inline-flex h-[56px] items-center gap-4 rounded-full bg-white pl-7 pr-2 text-[15px] font-semibold text-[#101612] transition hover:bg-white/90"
+                  >
+                    See more {category.name.toLowerCase()} properties
+                    <span className="rounded-full bg-[#101612]/10 px-2.5 py-1 font-display text-[11px] font-bold tracking-widest">
+                      +{list.length - HOME_LIMIT}
+                    </span>
+                    <span className="grid size-10 place-items-center rounded-full bg-[#101612] text-white">
+                      <ArrowIcon className="size-4" />
+                    </span>
+                  </Link>
+                </div>
+              )}
+
+              {list.length === 0 && (
                 <div className="reveal mt-8 flex flex-col items-start justify-between gap-6 rounded-[28px] border border-dashed border-white/20 bg-surface/50 p-8 sm:flex-row sm:items-center">
                   <p className="max-w-[520px] text-[16px] font-medium leading-7">
                     We’re preparing our {category.name.toLowerCase()} listings.

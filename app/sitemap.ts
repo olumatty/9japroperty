@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { categories } from "@/app/data/categories";
 import { regions } from "@/app/data/regions";
 import { properties } from "@/app/data/properties";
 import { siteUrl } from "@/app/lib/site";
@@ -9,6 +10,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteUrl}/sell`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${siteUrl}/about`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${siteUrl}/december`, changeFrequency: "monthly", priority: 0.7 },
+    ...categories.map((c) => ({
+      url: `${siteUrl}/categories/${c.slug}`,
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    })),
     ...regions.map((r) => ({
       url: `${siteUrl}/regions/${r.slug}`,
       changeFrequency: "monthly" as const,

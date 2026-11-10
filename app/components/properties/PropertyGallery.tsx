@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-const MAX_THUMBS = 6;
+const MAX_THUMBS = 4;
 
 export type MediaItem =
   | { type: "image"; src: string }
@@ -34,6 +34,7 @@ export function PropertyGallery({ title, items }: Props) {
   const count = items.length;
   const photos = items.filter((m) => m.type === "image").length;
   const videos = count - photos;
+  const thumbs = items.slice(1, 1 + MAX_THUMBS);
   const open = index !== null;
 
   const step = useCallback(
@@ -86,59 +87,79 @@ export function PropertyGallery({ title, items }: Props) {
 
   return (
     <>
-      {/* Main image */}
-      <button
-        type="button"
-        onClick={(e) => show(0, e.currentTarget)}
-        aria-label={`Open media 1 of ${count}`}
-        className="group rise relative mt-8 block h-[320px] w-full cursor-zoom-in overflow-hidden rounded-[32px] bg-surface sm:h-[480px] lg:h-[640px]"
-        style={{ "--d": 3 } as React.CSSProperties}
+      <div
+        className={`mt-8 grid gap-4 ${
+          thumbs.length > 0
+            ? "lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]"
+            : "max-w-[900px]"
+        }`}
       >
-        <Image
-          src={thumbOf(items[0])}
-          alt={title}
-          fill
-          preload
-          sizes="(min-width: 1480px) 1432px, 100vw"
-          className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-        />
-        {count > 1 && (
-          <span className="absolute bottom-4 right-4 rounded-full bg-[#101612]/80 px-4 py-2 font-display text-[11px] font-bold tracking-widest backdrop-blur">
-            VIEW ALL {photos} PHOTOS
-            {videos > 0 && ` + ${videos} VIDEO${videos > 1 ? "S" : ""}`}
-          </span>
-        )}
-      </button>
+        {/* Main image */}
+        <button
+          type="button"
+          onClick={(e) => show(0, e.currentTarget)}
+          aria-label={`Open media 1 of ${count}`}
+          className="group rise relative block h-[320px] w-full cursor-zoom-in overflow-hidden rounded-[28px] bg-surface sm:h-[440px] lg:h-[560px]"
+          style={{ "--d": 3 } as React.CSSProperties}
+        >
+          <Image
+            src={thumbOf(items[0])}
+            alt={title}
+            fill
+            preload
+            sizes="(min-width: 1480px) 880px, (min-width: 1024px) 58vw, 100vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+          />
+          {count > 1 && (
+            <span className="absolute bottom-4 right-4 rounded-full bg-[#101612]/80 px-4 py-2 font-display text-[11px] font-bold tracking-widest backdrop-blur">
+              VIEW ALL {photos} PHOTOS
+              {videos > 0 && ` + ${videos} VIDEO${videos > 1 ? "S" : ""}`}
+            </span>
+          )}
+        </button>
 
-      {/* Thumbnails */}
-      {count > 1 && (
-        <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-3">
-          {items.slice(1, 1 + MAX_THUMBS).map((item, i, shown) => (
-            <button
-              key={item.src}
-              type="button"
-              onClick={(e) => show(i + 1, e.currentTarget)}
-              aria-label={`Open ${item.type === "video" ? "video" : "photo"} ${i + 2} of ${count}`}
-              className="group reveal relative h-[160px] cursor-zoom-in overflow-hidden rounded-[20px] bg-surface sm:h-[220px] lg:h-[260px]"
-              style={{ "--i": i } as React.CSSProperties}
-            >
-              <Image
-                src={thumbOf(item)}
-                alt={alt(i + 1)}
-                fill
-                sizes="(min-width: 768px) 33vw, 50vw"
-                className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
-              />
-              {item.type === "video" && <PlayBadge />}
-              {i === shown.length - 1 && count - 1 > MAX_THUMBS && (
-                <span className="absolute inset-0 grid place-items-center bg-[#101612]/70 font-serif text-4xl backdrop-blur-[2px]">
-                  +{count - 1 - MAX_THUMBS}
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
-      )}
+        {/* Thumbnails */}
+        {thumbs.length > 0 && (
+          <div className="grid grid-cols-2 gap-4 lg:h-[560px] lg:grid-rows-2">
+            {thumbs.map((item, i) => {
+              const n = thumbs.length;
+              // Fill the right-hand block whatever the number of thumbnails.
+              const span =
+                n === 1
+                  ? "col-span-2 lg:row-span-2"
+                  : n === 2
+                    ? "col-span-2"
+                    : n === 3 && i === 0
+                      ? "col-span-2"
+                      : "";
+              return (
+                <button
+                  key={item.src}
+                  type="button"
+                  onClick={(e) => show(i + 1, e.currentTarget)}
+                  aria-label={`Open ${item.type === "video" ? "video" : "photo"} ${i + 2} of ${count}`}
+                  className={`group reveal relative h-[150px] cursor-zoom-in overflow-hidden rounded-[22px] bg-surface sm:h-[200px] lg:h-full ${span}`}
+                  style={{ "--i": i } as React.CSSProperties}
+                >
+                  <Image
+                    src={thumbOf(item)}
+                    alt={alt(i + 1)}
+                    fill
+                    sizes="(min-width: 1024px) 30vw, 50vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
+                  />
+                  {item.type === "video" && <PlayBadge />}
+                  {i === thumbs.length - 1 && count - 1 > MAX_THUMBS && (
+                    <span className="absolute inset-0 grid place-items-center bg-[#101612]/70 font-serif text-4xl backdrop-blur-[2px]">
+                      +{count - 1 - MAX_THUMBS}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </div>
 
       {/* Lightbox */}
       <dialog

@@ -26,6 +26,11 @@ const factIcons: Record<string, React.ReactNode> = {
       <path d="M4 21V8l8-5 8 5v13M9 21v-6h6v6" />
     </svg>
   ),
+  "Land size": (
+    <svg {...i}>
+      <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />
+    </svg>
+  ),
   "Boys’ quarters": (
     <svg {...i}>
       <path d="M3 11.5 12 4l9 7.5M6 10v10h12V10M10 20v-5h4v5" />

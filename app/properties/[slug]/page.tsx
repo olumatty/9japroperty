@@ -42,7 +42,7 @@ export default async function PropertyPage({ params }: Props) {
     .sort((a, b) => Number(b.city === property.city) - Number(a.city === property.city))
     .slice(0, 3);
 
-  const hasContent = Boolean(summary || (features && features.length > 0));
+  const hasContent = Boolean(features && features.length > 0);
 
   // "3 Bed Apartment ₦700M · 4 Bed ..." -> [{ name, price }] rows
   const options = priceNote
@@ -76,6 +76,10 @@ export default async function PropertyPage({ params }: Props) {
         </p>
 
         <PropertyGallery title={title} images={[image, ...(gallery ?? [])]} />
+
+        {!hasContent && summary && (
+          <p className="mt-8 max-w-[760px] text-[17px] font-medium leading-8">{summary}</p>
+        )}
 
         <div
           className={`mt-8 grid items-start gap-8 ${
@@ -136,7 +140,7 @@ export default async function PropertyPage({ params }: Props) {
 
           {/* Description + features */}
           <section>
-            {summary && (
+            {hasContent && summary && (
               <p className="max-w-[760px] text-[17px] font-medium leading-8">{summary}</p>
             )}
 

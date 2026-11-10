@@ -242,6 +242,48 @@ export const properties: Property[] = [
       "Ample space",
     ],
   },
+  {
+    id: "lawanson-storey-building",
+    title: "Storey Building in a Serene Neighbourhood",
+    location: "Lawanson, Surulere, Lagos",
+    city: "Lagos",
+    type: "Storey building",
+    category: "Dilapidated",
+    price: "₦110M",
+    image: "/properties/lawanson-storey.webp",
+    gallery: [
+      "/properties/lawanson-storey/1.webp",
+      "/properties/lawanson-storey/2.webp",
+    ],
+    facts: [
+      { label: "Land size", value: "215 sqm" },
+      { label: "Property type", value: "Storey building" },
+      { label: "Title", value: "Deed of Conveyance and Survey" },
+    ],
+    summary: "A storey building for sale in a serene neighbourhood.",
+  },
+  {
+    id: "ojuelegba-semi-detached",
+    title: "Units of 5 Bedroom Semi-Detached Houses with 2 Bedroom BQ",
+    location: "Off Ojuelegba Road, Surulere, Lagos",
+    city: "Lagos",
+    type: "Semi-detached houses",
+    category: "Dilapidated",
+    price: "₦250M",
+    image: "/properties/ojuelegba-semis.webp",
+    gallery: [
+      "/properties/ojuelegba-semis/1.webp",
+      "/properties/ojuelegba-semis/2.webp",
+    ],
+    facts: [
+      { label: "Bedrooms", value: "5" },
+      { label: "Boys’ quarters", value: "2 bedrooms" },
+      { label: "Land size", value: "500 sqm" },
+      { label: "Title", value: "Land Certificate and Will" },
+    ],
+    summary:
+      "Units of 5 bedroom semi-detached houses with a 2 bedroom BQ, in a serene and gated neighbourhood.",
+  },
 ];
 
 export function getProperty(slug: string) {

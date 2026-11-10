@@ -86,7 +86,7 @@ export default function AboutPage() {
           </div>
 
           <div
-            className="rise relative mx-auto aspect-[3/4] w-full max-w-[520px] overflow-hidden rounded-[32px] bg-surface lg:max-w-none"
+            className="rise relative mx-auto aspect-[3/4] w-full max-w-[400px] overflow-hidden rounded-[32px] bg-surface lg:mr-0 lg:max-w-[440px]"
             style={{ "--d": 3 } as React.CSSProperties}
           >
             <Image
@@ -94,7 +94,8 @@ export default function AboutPage() {
               alt={about.imageAlt}
               fill
               preload
-              sizes="(min-width: 1024px) 40vw, 520px"
+              sizes="(min-width: 1024px) 440px, 400px"
+              quality={90}
               className="object-cover object-top"
             />
           </div>

@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { contact } from "@/app/data/contact";
 import { regions } from "@/app/data/regions";
 import { ArrowIcon } from "@/app/components/ui/ArrowIcon";
 import { labelClass } from "@/app/lib/styles";
@@ -52,9 +51,7 @@ export function Hero() {
               </span>
             </Link>
             <Link
-              href={contact.enquiryHref}
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/consultancy"
               className="arrow-nudge inline-flex h-[52px] items-center gap-4 rounded-full border border-white/10 bg-[#101612]/80 pl-6 pr-2 text-[15px] font-semibold backdrop-blur transition hover:bg-[#101612]"
             >
               Book a consultation

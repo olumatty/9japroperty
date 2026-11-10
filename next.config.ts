@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
     // AVIF first (smallest), WebP fallback.
     formats: ["image/avif", "image/webp"],
     // Our source photos are at most ~1920px wide, so larger sizes are never needed.
+    // 75 for normal photos, 90 for the About portrait.
+    qualities: [75, 90],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
   },
 

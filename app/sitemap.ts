@@ -9,6 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: siteUrl, changeFrequency: "weekly", priority: 1 },
     { url: `${siteUrl}/sell`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${siteUrl}/about`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${siteUrl}/consultancy`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${siteUrl}/december`, changeFrequency: "monthly", priority: 0.7 },
     ...categories.map((c) => ({
       url: `${siteUrl}/categories/${c.slug}`,

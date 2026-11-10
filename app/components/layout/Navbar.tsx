@@ -10,6 +10,7 @@ import { labelClass } from "@/app/lib/styles";
 const links = [
   { label: "Properties", href: "/#properties" },
   { label: "December", href: "/#december" },
+  { label: "Consultancy", href: "/consultancy" },
   { label: "Sell", href: "/sell" },
   { label: "About", href: "/about" },
 ] as const;
@@ -55,7 +56,7 @@ export function Navbar() {
         </Link>
 
         {/* Desktop */}
-        <nav aria-label="Main" className="hidden items-center gap-8 md:flex">
+        <nav aria-label="Main" className="hidden items-center gap-6 xl:gap-8 lg:flex">
           {links.map((link) => (
             <Link
               key={link.label}
@@ -89,7 +90,7 @@ export function Navbar() {
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label={open ? "Close menu" : "Open menu"}
-          className="relative grid size-11 place-items-center rounded-full border border-white/15 md:hidden"
+          className="relative grid size-11 place-items-center rounded-full border border-white/15 lg:hidden"
         >
           <span
             className={`absolute h-0.5 w-5 rounded bg-white transition duration-300 ${
@@ -113,7 +114,7 @@ export function Navbar() {
       <div
         id="mobile-menu"
         hidden={!open}
-        className="border-t border-white/10 md:hidden"
+        className="border-t border-white/10 lg:hidden"
       >
         <nav aria-label="Mobile" className="mx-auto flex max-w-[1480px] flex-col gap-1 px-4 pb-6 pt-3 sm:px-5">
           {links.map((link) => (

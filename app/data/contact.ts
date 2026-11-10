@@ -24,7 +24,7 @@ export const exploreLinks = [
   { label: "Properties", href: "/#properties" },
   { label: "Shortlets", href: shortletEnquiryHref },
   { label: "December experience", href: "/#december" },
-  { label: "Consultancy", href: "/#consultation" },
+  { label: "Consultancy", href: "/consultancy" },
 ] as const;
 
 /** WhatsApp chat link with any pre-filled message. */

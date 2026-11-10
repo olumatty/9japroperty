@@ -36,7 +36,7 @@ const tick = (<svg {...s}><path d="m5 12.5 4.5 4.5L19 7.5" /></svg>);
 
 const rules: [RegExp, React.ReactNode][] = [
   [/water closet|\bwc\b/i, bath],
-  [/power|generator|inverter|solar/i, bolt],
+  [/power|generator|inverter|solar|electric/i, bolt],
   [/pool/i, pool],
   [/gym/i, gym],
   [/elevator|lift/i, lift],
@@ -57,7 +57,7 @@ const rules: [RegExp, React.ReactNode][] = [
   [/heat extractor|extractor|fan/i, fan],
   [/ceiling|pop\b/i, ceiling],
   [/secur|gate|cctv|fortif/i, shield],
-  [/spacious|rooms/i, space],
+  [/spacious|rooms|\bspace\b/i, space],
   [/\bac\b|air.?con|split unit/i, snow],
 ];
 

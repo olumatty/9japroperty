@@ -17,6 +17,8 @@ export type Property = {
   image: string;
   /** Extra detail-page images (interior, exterior, etc.) */
   gallery?: string[];
+  /** Short video clips shown in the gallery after the photos */
+  videos?: { src: string; poster: string }[];
   /** Key facts shown as tiles under the photos */
   facts?: { label: string; value: string }[];
   /** Short description shown on the detail page */

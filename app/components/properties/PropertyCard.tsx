@@ -50,7 +50,7 @@ export function PropertyCard({
   property: Property;
   index?: number;
 }) {
-  const { id, title, location, type, price, priceNote, image, gallery, category, facts } =
+  const { id, title, location, type, price, priceNote, image, gallery, category, facts, videos } =
     property;
   const photoCount = 1 + (gallery?.length ?? 0);
   const href = `/properties/${id}`;
@@ -74,6 +74,14 @@ export function PropertyCard({
           <span className="absolute left-3 top-3 rounded-full bg-[#101612]/75 px-3.5 py-1.5 font-display text-[10px] font-bold uppercase tracking-[0.14em] backdrop-blur">
             {category}
           </span>
+          {videos && videos.length > 0 && (
+            <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-[#101612]/75 px-3 py-1.5 text-[12px] font-semibold backdrop-blur">
+              <svg viewBox="0 0 24 24" fill="currentColor" className="size-3.5" aria-hidden="true">
+                <path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" />
+              </svg>
+              Video
+            </span>
+          )}
           {photoCount > 1 && (
             <span className="absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-[#101612]/75 px-3 py-1.5 text-[12px] font-semibold backdrop-blur">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="size-4" aria-hidden="true">

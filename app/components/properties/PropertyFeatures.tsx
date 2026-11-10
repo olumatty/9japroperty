@@ -32,6 +32,9 @@ const bed = (<svg {...s}><path d="M3 18V7M3 14h18v4M21 14v-2a3 3 0 0 0-3-3h-7v5"
 const sofa = (<svg {...s}><path d="M5 11V8a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v3M3 13a2 2 0 0 1 4 0v2h10v-2a2 2 0 0 1 4 0v5H3v-5ZM6 18v2M18 18v2" /></svg>);
 const floor = (<svg {...s}><path d="M3 8l9-4 9 4-9 4-9-4ZM3 8v4l9 4 9-4V8M3 12v4l9 4 9-4v-4" /></svg>);
 const home = (<svg {...s}><path d="M3 11.500 12 4l9 7.500M6 10v10h12V10M10 20v-5h4v5" /></svg>);
+const speaker = (<svg {...s}><path d="M5 9v6h3l5 4V5L8 9H5ZM16.500 9a4 4 0 0 1 0 6M18.500 7a7 7 0 0 1 0 10" /></svg>);
+const film = (<svg {...s}><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M7 5v14M17 5v14M3 9h4M17 9h4M3 15h4M17 15h4" /></svg>);
+const road = (<svg {...s}><path d="M9 3 5 21M15 3l4 18M12 4v3M12 10v4M12 17v3" /></svg>);
 const tick = (<svg {...s}><path d="m5 12.5 4.5 4.5L19 7.5" /></svg>);
 
 const rules: [RegExp, React.ReactNode][] = [
@@ -42,11 +45,14 @@ const rules: [RegExp, React.ReactNode][] = [
   [/elevator|lift/i, lift],
   [/parking|garage/i, car],
   [/smart|wifi|internet/i, smart],
-  [/kitchen|dining/i, kitchen],
+  [/kitchen|dining|pantry/i, kitchen],
   [/wardrobe|closet/i, wardrobe],
   [/water heater|heater|gas|burner/i, heater],
   [/en-?suite|toilet|bath|shower/i, bath],
-  [/spotlight|lighting/i, bulb],
+  [/spotlight|lighting|chandelier/i, bulb],
+  [/sound|speaker|audio/i, speaker],
+  [/cinema|theatre|theater/i, film],
+  [/road|access/i, road],
   [/guest room|bedroom/i, bed],
   [/lounge|sofa|living/i, sofa],
   [/floor|tile/i, floor],

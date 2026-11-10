@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { categories } from "@/app/data/categories";
-import { regions } from "@/app/data/regions";
+import { citySlug, nigeriaCities, regions } from "@/app/data/regions";
 import { properties } from "@/app/data/properties";
 import { siteUrl } from "@/app/lib/site";
 
@@ -12,6 +12,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteUrl}/december`, changeFrequency: "monthly", priority: 0.7 },
     ...categories.map((c) => ({
       url: `${siteUrl}/categories/${c.slug}`,
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    })),
+    ...nigeriaCities.map((c) => ({
+      url: `${siteUrl}/cities/${citySlug(c)}`,
       changeFrequency: "weekly" as const,
       priority: 0.7,
     })),

@@ -12,6 +12,12 @@ export const categories = [
     blurb: "Properties that need renovation, for buyers who can see the potential.",
   },
   {
+    slug: "land",
+    name: "Land",
+    title: "Land properties",
+    blurb: "Plots and land for sale, for building or investment.",
+  },
+  {
     slug: "off-plan",
     name: "Off-plan",
     title: "Off-plan properties",

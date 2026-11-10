@@ -32,7 +32,7 @@ export default async function PropertyPage({ params }: Props) {
   const property = getProperty(slug);
   if (!property) notFound();
 
-  const { title, location, type, price, priceNote, image, gallery, summary, features, facts } =
+  const { title, location, type, price, priceNote, image, gallery, summary, features, facts, videos } =
     property;
   const enquiryHref = propertyEnquiryHref(title);
 
@@ -75,7 +75,14 @@ export default async function PropertyPage({ params }: Props) {
           {property.category} · {location} · {type}
         </p>
 
-        <PropertyGallery title={title} images={[image, ...(gallery ?? [])]} />
+        <PropertyGallery
+          title={title}
+          items={[
+            { type: "image", src: image },
+            ...(gallery ?? []).map((src) => ({ type: "image" as const, src })),
+            ...(videos ?? []).map((v) => ({ type: "video" as const, ...v })),
+          ]}
+        />
 
         {!hasContent && summary && (
           <p className="mt-8 max-w-[760px] text-[17px] font-medium leading-8">{summary}</p>

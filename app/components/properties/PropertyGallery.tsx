@@ -5,15 +5,35 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 const MAX_THUMBS = 6;
 
-type Props = { title: string; images: string[] };
+export type MediaItem =
+  | { type: "image"; src: string }
+  | { type: "video"; src: string; poster: string };
+
+type Props = { title: string; items: MediaItem[] };
+
+const thumbOf = (item: MediaItem) => (item.type === "video" ? item.poster : item.src);
+
+function PlayBadge() {
+  return (
+    <span className="absolute inset-0 grid place-items-center bg-[#101612]/25">
+      <span className="grid size-14 place-items-center rounded-full bg-white text-[#101612] shadow-[0_10px_30px_-8px_rgba(0,0,0,0.6)]">
+        <svg viewBox="0 0 24 24" fill="currentColor" className="size-6 translate-x-px" aria-hidden="true">
+          <path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" />
+        </svg>
+      </span>
+    </span>
+  );
+}
 
 /** Main image + compact thumbnails. Any image opens a full-screen lightbox. */
-export function PropertyGallery({ title, images }: Props) {
+export function PropertyGallery({ title, items }: Props) {
   const [index, setIndex] = useState<number | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const touchX = useRef<number | null>(null);
   const opener = useRef<HTMLElement | null>(null);
-  const count = images.length;
+  const count = items.length;
+  const photos = items.filter((m) => m.type === "image").length;
+  const videos = count - photos;
   const open = index !== null;
 
   const step = useCallback(
@@ -45,6 +65,8 @@ export function PropertyGallery({ title, images }: Props) {
   useEffect(() => {
     if (!open) return;
     function onKey(e: KeyboardEvent) {
+      // Let arrow keys seek inside a focused video instead of changing slide.
+      if ((e.target as HTMLElement | null)?.tagName === "VIDEO") return;
       if (e.key === "ArrowRight") step(1);
       if (e.key === "ArrowLeft") step(-1);
     }
@@ -57,7 +79,8 @@ export function PropertyGallery({ title, images }: Props) {
     setIndex(i);
   }
 
-  const alt = (i: number) => (i === 0 ? title : `${title} – photo ${i + 1}`);
+  const alt = (i: number) =>
+    i === 0 ? title : `${title} – ${items[i].type === "video" ? "video" : `photo ${i + 1}`}`;
   const btn =
     "grid size-12 place-items-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white hover:text-[#101612] focus-visible:ring-2 focus-visible:ring-white";
 
@@ -67,12 +90,12 @@ export function PropertyGallery({ title, images }: Props) {
       <button
         type="button"
         onClick={(e) => show(0, e.currentTarget)}
-        aria-label={`Open photo 1 of ${count}`}
+        aria-label={`Open media 1 of ${count}`}
         className="group rise relative mt-8 block h-[320px] w-full cursor-zoom-in overflow-hidden rounded-[32px] bg-surface sm:h-[480px] lg:h-[640px]"
         style={{ "--d": 3 } as React.CSSProperties}
       >
         <Image
-          src={images[0]}
+          src={thumbOf(items[0])}
           alt={title}
           fill
           preload
@@ -81,7 +104,8 @@ export function PropertyGallery({ title, images }: Props) {
         />
         {count > 1 && (
           <span className="absolute bottom-4 right-4 rounded-full bg-[#101612]/80 px-4 py-2 font-display text-[11px] font-bold tracking-widest backdrop-blur">
-            VIEW ALL {count} PHOTOS
+            VIEW ALL {photos} PHOTOS
+            {videos > 0 && ` + ${videos} VIDEO${videos > 1 ? "S" : ""}`}
           </span>
         )}
       </button>
@@ -89,22 +113,23 @@ export function PropertyGallery({ title, images }: Props) {
       {/* Thumbnails */}
       {count > 1 && (
         <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-3">
-          {images.slice(1, 1 + MAX_THUMBS).map((src, i, shown) => (
+          {items.slice(1, 1 + MAX_THUMBS).map((item, i, shown) => (
             <button
-              key={src}
+              key={item.src}
               type="button"
               onClick={(e) => show(i + 1, e.currentTarget)}
-              aria-label={`Open photo ${i + 2} of ${count}`}
+              aria-label={`Open ${item.type === "video" ? "video" : "photo"} ${i + 2} of ${count}`}
               className="group reveal relative h-[160px] cursor-zoom-in overflow-hidden rounded-[20px] bg-surface sm:h-[220px] lg:h-[260px]"
               style={{ "--i": i } as React.CSSProperties}
             >
               <Image
-                src={src}
+                src={thumbOf(item)}
                 alt={alt(i + 1)}
                 fill
                 sizes="(min-width: 768px) 33vw, 50vw"
                 className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
               />
+              {item.type === "video" && <PlayBadge />}
               {i === shown.length - 1 && count - 1 > MAX_THUMBS && (
                 <span className="absolute inset-0 grid place-items-center bg-[#101612]/70 font-serif text-4xl backdrop-blur-[2px]">
                   +{count - 1 - MAX_THUMBS}
@@ -123,7 +148,10 @@ export function PropertyGallery({ title, images }: Props) {
         onClick={(e) => {
           if (e.target === e.currentTarget) setIndex(null);
         }}
-        onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
+        onTouchStart={(e) =>
+          (touchX.current =
+            (e.target as HTMLElement).tagName === "VIDEO" ? null : e.touches[0].clientX)
+        }
         onTouchEnd={(e) => {
           if (touchX.current === null) return;
           const dx = e.changedTouches[0].clientX - touchX.current;
@@ -146,14 +174,29 @@ export function PropertyGallery({ title, images }: Props) {
             </div>
 
             <div className="relative min-h-0 flex-1">
-              <Image
-                key={images[index]}
-                src={images[index]}
-                alt={alt(index)}
-                fill
-                sizes="100vw"
-                className="object-contain"
-              />
+              {items[index].type === "video" ? (
+                <video
+                  key={items[index].src}
+                  src={items[index].src}
+                  poster={items[index].type === "video" ? items[index].poster : undefined}
+                  controls
+                  autoPlay
+                  playsInline
+                  preload="metadata"
+                  className="size-full object-contain"
+                >
+                  Your browser can’t play this video.
+                </video>
+              ) : (
+                <Image
+                  key={items[index].src}
+                  src={items[index].src}
+                  alt={alt(index)}
+                  fill
+                  sizes="100vw"
+                  className="object-contain"
+                />
+              )}
             </div>
 
             {count > 1 && (
@@ -161,7 +204,7 @@ export function PropertyGallery({ title, images }: Props) {
                 <button
                   type="button"
                   onClick={() => step(-1)}
-                  aria-label="Previous photo"
+                  aria-label="Previous"
                   className={`${btn} absolute left-3 top-1/2 -translate-y-1/2 sm:left-6`}
                 >
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="size-5" aria-hidden="true">
@@ -171,7 +214,7 @@ export function PropertyGallery({ title, images }: Props) {
                 <button
                   type="button"
                   onClick={() => step(1)}
-                  aria-label="Next photo"
+                  aria-label="Next"
                   className={`${btn} absolute right-3 top-1/2 -translate-y-1/2 sm:right-6`}
                 >
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="size-5" aria-hidden="true">

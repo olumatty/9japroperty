@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getRegion, nigeriaCities, regions } from "@/app/data/regions";
+import { CITY_LIMIT, citySlug, getRegion, nigeriaCities, regions } from "@/app/data/regions";
 import { properties } from "@/app/data/properties";
 import { whatsappLink } from "@/app/data/contact";
 import { ArrowIcon } from "@/app/components/ui/ArrowIcon";
@@ -153,8 +153,9 @@ function NigeriaCities() {
               <h2 className="mt-8 text-4xl leading-none sm:text-5xl">{city}</h2>
 
               {list.length > 0 ? (
-                <ul className="mt-8 flex flex-1 flex-col divide-y divide-white/10 border-t border-white/10">
-                  {list.map((p) => (
+                <div className="mt-8 flex flex-1 flex-col">
+                <ul className="flex flex-1 flex-col divide-y divide-white/10 border-t border-white/10">
+                  {list.slice(0, CITY_LIMIT).map((p) => (
                     <li key={p.id}>
                       <Link
                         href={`/properties/${p.id}`}
@@ -175,6 +176,18 @@ function NigeriaCities() {
                     </li>
                   ))}
                 </ul>
+                {list.length > CITY_LIMIT && (
+                  <Link
+                    href={`/cities/${citySlug(city)}`}
+                    className="arrow-nudge mt-6 inline-flex h-[52px] items-center justify-between gap-4 rounded-full bg-white pl-6 pr-2 text-[15px] font-semibold text-[#101612] transition hover:bg-white/90"
+                  >
+                    See all {list.length} properties in {city}
+                    <span className="grid size-9 place-items-center rounded-full bg-[#101612] text-white">
+                      <ArrowIcon className="size-4" />
+                    </span>
+                  </Link>
+                )}
+                </div>
               ) : (
                 <div className="mt-8 flex flex-1 flex-col items-start justify-between gap-6 border-t border-white/10 pt-6">
                   <p className="text-[15px] font-medium leading-7 text-white/80">

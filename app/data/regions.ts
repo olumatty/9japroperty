@@ -19,4 +19,11 @@ export function getRegion(slug: string) {
 
 /** Cities shown on the Nigeria page. */
 export const nigeriaCities = ["Abuja", "Lagos", "Abeokuta"] as const;
+export const citySlug = (city: string) => city.toLowerCase();
+export const getCityBySlug = (slug: string) =>
+  nigeriaCities.find((c) => citySlug(c) === slug);
+
+/** How many properties a city card shows on the Nigeria page before "See all". */
+export const CITY_LIMIT = 5;
+
 export type NigeriaCity = (typeof nigeriaCities)[number];

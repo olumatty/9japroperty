@@ -284,6 +284,35 @@ export const properties: Property[] = [
     summary:
       "Units of 5 bedroom semi-detached houses with a 2 bedroom BQ, in a serene and gated neighbourhood.",
   },
+  {
+    id: "alapere-miniflat",
+    title: "Executive Miniflat (Upstairs)",
+    location: "Alapere, Lagos",
+    city: "Lagos",
+    type: "Miniflat",
+    category: "Dilapidated",
+    price: "₦45M",
+    image: "/properties/alapere-miniflat.webp",
+    gallery: [
+      "/properties/alapere-miniflat/1.webp",
+      "/properties/alapere-miniflat/2.webp",
+    ],
+    facts: [
+      { label: "Property type", value: "Miniflat (upstairs)" },
+      { label: "Title", value: "Global C of O and Allotment Letter" },
+    ],
+    summary:
+      "Executive miniflat (upstairs) for sale in a serene and well-planned neighbourhood.",
+    features: [
+      "Open-plan kitchen with cabinets",
+      "2 toilets and bathroom",
+      "Solar inverter",
+      "Personal prepaid meter",
+      "Gas burners",
+      "Water heater",
+      "Ample parking space",
+    ],
+  },
 ];
 
 export function getProperty(slug: string) {

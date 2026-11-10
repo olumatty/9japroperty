@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+const MAX_THUMBS = 6;
+
 type Props = { title: string; images: string[] };
 
 /** Main image + compact thumbnails. Any image opens a full-screen lightbox. */
@@ -87,7 +89,7 @@ export function PropertyGallery({ title, images }: Props) {
       {/* Thumbnails */}
       {count > 1 && (
         <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-3">
-          {images.slice(1).map((src, i) => (
+          {images.slice(1, 1 + MAX_THUMBS).map((src, i, shown) => (
             <button
               key={src}
               type="button"
@@ -103,6 +105,11 @@ export function PropertyGallery({ title, images }: Props) {
                 sizes="(min-width: 768px) 33vw, 50vw"
                 className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
               />
+              {i === shown.length - 1 && count - 1 > MAX_THUMBS && (
+                <span className="absolute inset-0 grid place-items-center bg-[#101612]/70 font-serif text-4xl backdrop-blur-[2px]">
+                  +{count - 1 - MAX_THUMBS}
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -175,7 +182,7 @@ export function PropertyGallery({ title, images }: Props) {
             )}
 
             <p className="px-4 py-4 text-center text-[13px] font-medium text-white/70">
-              {title} · Illustrative photo
+              {title}
             </p>
           </div>
         )}

@@ -125,8 +125,8 @@ function NigeriaCities() {
           className="rise mt-6 max-w-[620px] text-[16px] font-medium leading-7"
           style={delay(3)}
         >
-          Choose a city to see what we’re showing right now. Images and details
-          are illustrative, so enquire to confirm current status.
+          Choose a city to see what we’re showing right now. Enquire to confirm
+          current status.
         </p>
       </header>
 

@@ -72,14 +72,7 @@ export default async function PropertyPage({ params }: Props) {
         </h1>
 
         <p className="rise mt-6 text-[16px] font-medium" style={{ "--d": 1 } as React.CSSProperties}>
-          {location} · {type}
-        </p>
-
-        <p className={`${labelClass} rise mt-8`} style={{ "--d": 2 } as React.CSSProperties}>
-          Illustrative photos only ·{" "}
-          <span className="normal-case tracking-normal">
-            Real property photos will replace these placeholders.
-          </span>
+          {property.category} · {location} · {type}
         </p>
 
         <PropertyGallery title={title} images={[image, ...(gallery ?? [])]} />

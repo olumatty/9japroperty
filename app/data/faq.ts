@@ -4,8 +4,8 @@ export const faqs = [
     a: "Open the property and press “Enquire on WhatsApp”. WhatsApp opens with the property name already in your message, and our team replies in that chat.",
   },
   {
-    q: "Are the photos on the website real?",
-    a: "For now the photos are illustrative placeholders, and real property photos will replace them. Please enquire to confirm a property’s current status and pricing.",
+    q: "Are the photos up to date?",
+    a: "Photos show a property as it was when they were taken. Please enquire to confirm its current status and pricing, and to arrange a viewing.",
   },
   {
     q: "Can I buy or invest from abroad?",

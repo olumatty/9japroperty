@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { propertyTypes } from "@/app/data/sell";
+import { propertyTypes, sellerRoles } from "@/app/data/sell";
 import { whatsappLink } from "@/app/data/contact";
 import { ArrowIcon } from "@/app/components/ui/ArrowIcon";
 import { labelClass } from "@/app/lib/styles";
@@ -22,6 +22,7 @@ function buildMessage(data: FormData) {
   const rows: [string, string][] = [
     ["Name", get("name")],
     ["Phone / WhatsApp", get("phone")],
+    ["I am selling as", get("role")],
     ["Email", get("email")],
     ["Currently living in", get("residence")],
     ["Property type", get("type")],
@@ -41,6 +42,7 @@ function buildMessage(data: FormData) {
 const rules: Rules = {
   name: fullName,
   phone,
+  role: required("Please choose how you are selling."),
   type: required("Please choose what you are selling."),
   location: required("Please tell us where the property is."),
   email: optionalEmail,
@@ -194,6 +196,31 @@ export function SellForm() {
             <input id="phone" name="phone" type="tel" required autoComplete="tel" className={field} placeholder="+234 …" />
           </Field>
         </div>
+
+        <fieldset className="mt-5 flex flex-col gap-3">
+          <legend className={`${labelClass} mb-3`}>I am selling as</legend>
+          <div className="flex flex-wrap gap-2.5">
+            {sellerRoles.map((role, i) => (
+              <label key={role.value} className="cursor-pointer" title={role.hint}>
+                <input
+                  type="radio"
+                  name="role"
+                  value={role.value}
+                  required={i === 0}
+                  className="peer sr-only"
+                />
+                <span className="inline-flex h-11 select-none items-center rounded-full border border-white/15 bg-background px-5 text-[14px] font-semibold transition duration-300 hover:-translate-y-0.5 hover:border-white/50 peer-checked:-translate-y-0.5 peer-checked:border-white peer-checked:bg-white peer-checked:text-[#101612] peer-checked:shadow-[0_10px_28px_-8px_rgba(255,255,255,0.45)] peer-focus-visible:ring-2 peer-focus-visible:ring-white/60 peer-aria-[invalid=true]:border-red-400/70">
+                  {role.value}
+                </span>
+              </label>
+            ))}
+          </div>
+          <p className="text-[13px] font-medium leading-5 text-white/60">
+            Owner: you own it. Realtor: you sell for clients. Developer: you
+            built it. Mandate: you hold the owner’s written authority to sell.
+          </p>
+          <FieldError name="role" error={errors.role} className="mt-1" />
+        </fieldset>
       </Group>
 
       {/* Step 2 */}

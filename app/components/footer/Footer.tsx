@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { contact, exploreLinks, socials } from "@/app/data/contact";
 import { SocialIcon } from "@/app/components/ui/SocialIcon";
@@ -37,9 +38,14 @@ export function Footer() {
         {/* Links */}
         <div className="reveal mt-8 grid grid-cols-1 gap-8 border-t border-white/10 pt-8 md:grid-cols-[1fr_auto_auto] md:gap-x-24">
           <div>
-            <p className="font-serif text-[32px] leading-none">
-              The9jaPropertyChic
-            </p>
+            <Image
+              src="/brand/logo-full.png"
+              alt="The9jaPropertyChic"
+              width={893}
+              height={564}
+              sizes="200px"
+              className="h-auto w-[170px] sm:w-[200px]"
+            />
             <p className="mt-4 text-[16px] font-medium">
               Your Property Connection to Nigeria.
             </p>

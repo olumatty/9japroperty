@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -51,8 +52,16 @@ export function Navbar() {
       }`}
     >
       <div className="mx-auto flex h-[72px] w-full max-w-[1480px] items-center justify-between gap-3 sm:gap-6 px-4 sm:px-5 lg:px-6">
-        <Link href="/" className="font-display text-base sm:text-lg font-extrabold">
-          The9jaPropertyChic
+        <Link href="/" aria-label="The9jaPropertyChic home" className="flex items-center">
+          <Image
+            src="/brand/logo-full.png"
+            alt="The9jaPropertyChic"
+            width={893}
+            height={564}
+            preload
+            sizes="100px"
+            className="h-[52px] w-auto sm:h-[56px]"
+          />
         </Link>
 
         {/* Desktop */}

@@ -44,38 +44,49 @@ export function FeaturedProperties() {
         Enquire for current status
       </p>
 
-      <div
-        role="tablist"
-        aria-label="Property categories"
-        className="reveal mt-8 flex flex-wrap gap-2.5"
-      >
-        {categories.map((c) => {
-          const selected = c.slug === category.slug;
-          const total = properties.filter((p) => p.category === c.name).length;
-          return (
-            <button
-              key={c.slug}
-              type="button"
-              role="tab"
-              id={`tab-${c.slug}`}
-              aria-selected={selected}
-              aria-controls="category-panel"
-              tabIndex={selected ? 0 : -1}
-              onClick={() => setActive(c.slug)}
-              onKeyDown={(e) => onTabKey(e, c.slug)}
-              className={`inline-flex h-11 items-center gap-2 rounded-full border px-5 text-[14px] font-semibold transition ${
-                selected
-                  ? "border-white bg-white text-[#101612]"
-                  : "border-white/15 bg-surface hover:border-white/50 hover:bg-[#243029]"
-              }`}
-            >
-              {c.name}
-              <span className={`text-[12px] ${selected ? "text-[#101612]/60" : "text-white/50"}`}>
-                {total}
-              </span>
-            </button>
-          );
-        })}
+      <div className="reveal mt-8 flex flex-wrap items-center justify-between gap-4">
+        <div
+          role="tablist"
+          aria-label="Property categories"
+          className="flex flex-wrap gap-2.5"
+        >
+          {categories.map((c) => {
+            const selected = c.slug === category.slug;
+            const total = properties.filter((p) => p.category === c.name).length;
+            return (
+              <button
+                key={c.slug}
+                type="button"
+                role="tab"
+                id={`tab-${c.slug}`}
+                aria-selected={selected}
+                aria-controls="category-panel"
+                tabIndex={selected ? 0 : -1}
+                onClick={() => setActive(c.slug)}
+                onKeyDown={(e) => onTabKey(e, c.slug)}
+                className={`inline-flex h-11 items-center gap-2 rounded-full border px-5 text-[14px] font-semibold transition ${
+                  selected
+                    ? "border-white bg-white text-[#101612]"
+                    : "border-white/15 bg-surface hover:border-white/50 hover:bg-[#243029]"
+                }`}
+              >
+                {c.name}
+                <span className={`text-[12px] ${selected ? "text-[#101612]/60" : "text-white/50"}`}>
+                  {total}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+        <Link
+          href="/properties"
+          className="arrow-nudge inline-flex h-11 items-center gap-3 rounded-full bg-white pl-5 pr-1.5 text-[14px] font-semibold text-[#101612] transition hover:bg-white/90"
+        >
+          Search &amp; filter all
+          <span className="grid size-8 place-items-center rounded-full bg-[#101612] text-white">
+            <ArrowIcon className="size-3.5" />
+          </span>
+        </Link>
       </div>
 
       <div

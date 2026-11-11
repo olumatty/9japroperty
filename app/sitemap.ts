@@ -7,6 +7,7 @@ import { siteUrl } from "@/app/lib/site";
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: siteUrl, changeFrequency: "weekly", priority: 1 },
+    { url: `${siteUrl}/properties`, changeFrequency: "weekly", priority: 0.9 },
     { url: `${siteUrl}/sell`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${siteUrl}/about`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${siteUrl}/consultancy`, changeFrequency: "monthly", priority: 0.7 },

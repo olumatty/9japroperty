@@ -24,6 +24,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${property.title} | The9jaPropertyChic`,
     description: `${property.title} in ${property.location}.`,
+    openGraph: {
+      title: `${property.title} | The9jaPropertyChic`,
+      description: `${property.location}${property.price ? ` · ${property.price}` : ""}`,
+      images: [
+        { url: `/og/${property.id}.jpg`, width: 1200, height: 630, alt: property.title },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      images: [`/og/${property.id}.jpg`],
+    },
   };
 }
 

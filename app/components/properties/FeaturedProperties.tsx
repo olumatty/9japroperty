@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import { HOME_LIMIT, categories } from "@/app/data/categories";
 import { whatsappLink } from "@/app/data/contact";
 import { properties } from "@/app/data/properties";
@@ -7,6 +10,21 @@ import { PropertyCard } from "./PropertyCard";
 import { labelClass } from "@/app/lib/styles";
 
 export function FeaturedProperties() {
+  const [active, setActive] = useState<string>(categories[0].slug);
+  const category = categories.find((c) => c.slug === active) ?? categories[0];
+  const list = properties.filter((p) => p.category === category.name);
+
+  function onTabKey(e: React.KeyboardEvent, slug: string) {
+    const i = categories.findIndex((c) => c.slug === slug);
+    const next =
+      e.key === "ArrowRight" ? i + 1 : e.key === "ArrowLeft" ? i - 1 : null;
+    if (next === null) return;
+    e.preventDefault();
+    const target = categories[(next + categories.length) % categories.length];
+    setActive(target.slug);
+    document.getElementById(`tab-${target.slug}`)?.focus();
+  }
+
   return (
     <section
       id="properties"
@@ -26,89 +44,110 @@ export function FeaturedProperties() {
         Enquire for current status
       </p>
 
-      <nav aria-label="Property categories" className="reveal mt-8 flex flex-wrap gap-2.5">
-        {categories.map((c) => (
-          <a
-            key={c.slug}
-            href={`#${c.slug}`}
-            className="inline-flex h-11 items-center rounded-full border border-white/15 bg-surface px-5 text-[14px] font-semibold transition hover:border-white/50 hover:bg-[#243029]"
-          >
-            {c.name}
-          </a>
-        ))}
-      </nav>
-
-      <div className="mt-14 flex flex-col gap-20">
-        {categories.map((category, ci) => {
-          const list = properties.filter((p) => p.category === category.name);
+      <div
+        role="tablist"
+        aria-label="Property categories"
+        className="reveal mt-8 flex flex-wrap gap-2.5"
+      >
+        {categories.map((c) => {
+          const selected = c.slug === category.slug;
+          const total = properties.filter((p) => p.category === c.name).length;
           return (
-            <div key={category.slug} id={category.slug} className="scroll-mt-28">
-              <div className="flex flex-wrap items-end justify-between gap-4 border-b border-white/10 pb-6">
-                <div>
-                  <p className={`${labelClass} reveal text-white/60`}>
-                    {String(ci + 1).padStart(2, "0")} · {category.name}
-                  </p>
-                  <h3 className="reveal mt-4 text-4xl leading-none sm:text-5xl">
-                    {category.title}
-                  </h3>
-                  <p className="reveal mt-4 max-w-[560px] text-[15px] font-medium leading-6 text-white/80">
-                    {category.blurb}
-                  </p>
-                </div>
-                <span className="rounded-full border border-white/20 px-3 py-1 font-display text-[11px] font-bold tracking-widest">
-                  {list.length === 0
-                    ? "COMING SOON"
-                    : `${list.length} ${list.length === 1 ? "PROPERTY" : "PROPERTIES"}`}
-                </span>
-              </div>
-
-              {list.length > 0 && (
-                <div className="mt-8 grid grid-cols-1 items-start gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {list.slice(0, HOME_LIMIT).map((property, i) => (
-                    <PropertyCard key={property.id} property={property} index={i} />
-                  ))}
-                </div>
-              )}
-
-              {list.length > HOME_LIMIT && (
-                <div className="mt-8 flex justify-center">
-                  <Link
-                    href={`/categories/${category.slug}`}
-                    className="arrow-nudge inline-flex h-[56px] items-center gap-4 rounded-full bg-white pl-7 pr-2 text-[15px] font-semibold text-[#101612] transition hover:bg-white/90"
-                  >
-                    See more {category.name.toLowerCase()} properties
-                    <span className="rounded-full bg-[#101612]/10 px-2.5 py-1 font-display text-[11px] font-bold tracking-widest">
-                      +{list.length - HOME_LIMIT}
-                    </span>
-                    <span className="grid size-10 place-items-center rounded-full bg-[#101612] text-white">
-                      <ArrowIcon className="size-4" />
-                    </span>
-                  </Link>
-                </div>
-              )}
-
-              {list.length === 0 && (
-                <div className="reveal mt-8 flex flex-col items-start justify-between gap-6 rounded-[28px] border border-dashed border-white/20 bg-surface/50 p-8 sm:flex-row sm:items-center">
-                  <p className="max-w-[520px] text-[16px] font-medium leading-7">
-                    We’re preparing our {category.name.toLowerCase()} listings.
-                    Tell us what you’re looking for and we’ll let you know as
-                    soon as something fits.
-                  </p>
-                  <Link
-                    href={whatsappLink(
-                      `Hello The9jaPropertyChic, I'm interested in ${category.name.toLowerCase()} properties.`,
-                    )}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="link-slide shrink-0 text-[15px] font-semibold"
-                  >
-                    Ask about {category.name.toLowerCase()} properties
-                  </Link>
-                </div>
-              )}
-            </div>
+            <button
+              key={c.slug}
+              type="button"
+              role="tab"
+              id={`tab-${c.slug}`}
+              aria-selected={selected}
+              aria-controls="category-panel"
+              tabIndex={selected ? 0 : -1}
+              onClick={() => setActive(c.slug)}
+              onKeyDown={(e) => onTabKey(e, c.slug)}
+              className={`inline-flex h-11 items-center gap-2 rounded-full border px-5 text-[14px] font-semibold transition ${
+                selected
+                  ? "border-white bg-white text-[#101612]"
+                  : "border-white/15 bg-surface hover:border-white/50 hover:bg-[#243029]"
+              }`}
+            >
+              {c.name}
+              <span className={`text-[12px] ${selected ? "text-[#101612]/60" : "text-white/50"}`}>
+                {total}
+              </span>
+            </button>
           );
         })}
+      </div>
+
+      <div
+        key={category.slug}
+        id="category-panel"
+        role="tabpanel"
+        aria-labelledby={`tab-${category.slug}`}
+        className="mt-14"
+      >
+        <div className="flex flex-wrap items-end justify-between gap-4 border-b border-white/10 pb-6">
+          <div>
+            <p className={`${labelClass} reveal text-white/60`}>
+              {category.name}
+            </p>
+            <h3 className="reveal mt-4 text-4xl leading-none sm:text-5xl">
+              {category.title}
+            </h3>
+            <p className="reveal mt-4 max-w-[560px] text-[15px] font-medium leading-6 text-white/80">
+              {category.blurb}
+            </p>
+          </div>
+          <span className="rounded-full border border-white/20 px-3 py-1 font-display text-[11px] font-bold tracking-widest">
+            {list.length === 0
+              ? "COMING SOON"
+              : `${list.length} ${list.length === 1 ? "PROPERTY" : "PROPERTIES"}`}
+          </span>
+        </div>
+
+        {list.length > 0 && (
+          <div className="mt-8 grid grid-cols-1 items-start gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {list.slice(0, HOME_LIMIT).map((property, i) => (
+              <PropertyCard key={property.id} property={property} index={i} />
+            ))}
+          </div>
+        )}
+
+        {list.length > HOME_LIMIT && (
+          <div className="mt-8 flex justify-center">
+            <Link
+              href={`/categories/${category.slug}`}
+              className="arrow-nudge inline-flex h-[56px] items-center gap-4 rounded-full bg-white pl-7 pr-2 text-[15px] font-semibold text-[#101612] transition hover:bg-white/90"
+            >
+              See more {category.name.toLowerCase()} properties
+              <span className="rounded-full bg-[#101612]/10 px-2.5 py-1 font-display text-[11px] font-bold tracking-widest">
+                +{list.length - HOME_LIMIT}
+              </span>
+              <span className="grid size-10 place-items-center rounded-full bg-[#101612] text-white">
+                <ArrowIcon className="size-4" />
+              </span>
+            </Link>
+          </div>
+        )}
+
+        {list.length === 0 && (
+          <div className="reveal mt-8 flex flex-col items-start justify-between gap-6 rounded-[28px] border border-dashed border-white/20 bg-surface/50 p-8 sm:flex-row sm:items-center">
+            <p className="max-w-[520px] text-[16px] font-medium leading-7">
+              We’re preparing our {category.name.toLowerCase()} listings.
+              Tell us what you’re looking for and we’ll let you know as
+              soon as something fits.
+            </p>
+            <Link
+              href={whatsappLink(
+                `Hello The9jaPropertyChic, I'm interested in ${category.name.toLowerCase()} properties.`,
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-slide shrink-0 text-[15px] font-semibold"
+            >
+              Ask about {category.name.toLowerCase()} properties
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );

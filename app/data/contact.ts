@@ -22,7 +22,7 @@ export const exploreLinks = [
   { label: "Sell your property", href: "/sell" },
   { label: "About", href: "/about" },
   { label: "Properties", href: "/#properties" },
-  { label: "Shortlets", href: shortletEnquiryHref },
+  { label: "Shortlets", href: "/shortlets" },
   { label: "December experience", href: "/#december" },
   { label: "Consultancy", href: "/consultancy" },
 ] as const;

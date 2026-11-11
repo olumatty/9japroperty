@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { shortletEnquiryHref } from "@/app/data/contact";
 import { decemberSteps } from "@/app/data/december-steps";
 import { ArrowIcon } from "@/app/components/ui/ArrowIcon";
 import { labelClass } from "@/app/lib/styles";
@@ -71,9 +70,7 @@ export function DecemberExperience() {
           </span>
         </Link>
         <Link
-          href={shortletEnquiryHref}
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/shortlets"
           className="arrow-nudge inline-flex h-[52px] items-center gap-4 rounded-full border border-white/10 bg-surface pl-6 pr-2 text-[15px] font-semibold transition hover:bg-[#243029]"
         >
           Explore shortlets

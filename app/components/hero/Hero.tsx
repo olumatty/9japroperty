@@ -28,16 +28,17 @@ export function Hero() {
           }}
         />
         <div className="relative flex min-h-[540px] flex-col justify-center gap-5 px-6 py-10 sm:px-8 lg:min-h-[720px] lg:px-12">
-          <p className={`${labelClass} rise`} style={{ "--d": 2 } as React.CSSProperties}>Nigerian property, from anywhere.</p>
+          <p className={`${labelClass} rise`} style={{ "--d": 2 } as React.CSSProperties}>Property in Nigeria and across the diaspora.</p>
 
-          <h1 style={{ "--d": 3 } as React.CSSProperties} className="rise max-w-[640px] text-5xl leading-[1.02] sm:text-6xl lg:text-[84px]">
-            Your Property Connection to Nigeria.
+          <h1 style={{ "--d": 3 } as React.CSSProperties} className="rise max-w-[760px] text-[44px] leading-[1.04] sm:text-6xl lg:text-[76px]">
+            Your Property Connection to Nigeria and the Diaspora.
           </h1>
 
           <p style={{ "--d": 4 } as React.CSSProperties} className="rise max-w-[620px] text-base font-medium leading-7 sm:text-[17px]">
-            From finding property in Nigeria to helping you settle in when you
-            return home, The9jaPropertyChic connects you to real estate
-            opportunities and premium Airbnb experiences in Nigeria.
+            Whether you’re buying in Nigeria or abroad, The9jaPropertyChic
+            connects you to real estate opportunities at home and across the
+            diaspora, and to premium Airbnb stays and a smooth landing when
+            you come home.
           </p>
 
           <div style={{ "--d": 5 } as React.CSSProperties} className="rise mt-2 flex flex-wrap gap-3">

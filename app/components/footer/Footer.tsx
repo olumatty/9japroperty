@@ -47,7 +47,7 @@ export function Footer() {
               className="h-auto w-[170px] sm:w-[200px]"
             />
             <p className="mt-4 text-[16px] font-medium">
-              Your Property Connection to Nigeria.
+              Your Property Connection to Nigeria and the Diaspora.
             </p>
             <p className="mt-4 font-display text-[11px] font-bold tracking-wide">
               Nigeria. Connected to you, wherever you are.
